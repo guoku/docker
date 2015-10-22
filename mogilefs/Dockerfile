@@ -1,13 +1,15 @@
 FROM 		ubuntu:latest
 MAINTAINER	jiaxin	<jiaxin@guoku.com>
-RUN		apt-get update
-RUN		apt-get -y install cpanminus
-RUN		echo "alias cpanm='cpanm --sudo --mirror http://mirrors.163.com/cpan --mirror-only'" >> .bashrc
-RUN		cpanm MogileFS::Server
+RUN		apt-get -y update
+RUN		apt-get -y install gcc make cpanminus
+RUN		echo "alias cpanm='cpanm --sudo --mirror http://mirrors.163.com/cpan --mirror-only'" >> /root/.bashrc
 RUN		cpanm MogileFS::Utils
 RUN		cpanm MogileFS::Client
 RUN		cpanm IO::AIO
+RUN		cpanm MogileFS::Server
+RUN		mkdir /data
 ADD		mogstored.conf /etc/mogilefs/mogstored.conf
-EXPOSE		6379
-ENTRYPOINT	["/usr/bin/redis-server", "/etc/redis.conf"]
+VOLUME	/data
+EXPOSE		7500 7501
+ENTRYPOINT	["/usr/local/bin/mogstored", "--config", "/etc/mogilefs/mogstored.conf"]
 CMD		[]
