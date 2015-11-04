@@ -12,5 +12,5 @@ RUN			make && make install
 COPY		squid.conf /opt/squid/etc/squid.conf
 VOLUME 		["/data"]
 EXPOSE 		3128
-CMD 		["/opt/squid/sbin/squid" "-z"]
+
 
