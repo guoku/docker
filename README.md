@@ -1,6 +1,5 @@
 # docker
 
-<<<<<<< HEAD
 
 * install squid
 
@@ -13,5 +12,3 @@ docker exec ${docker-name} /opt/squid/sbin/squid -z
 docker exec ${docker-name} /opt/squid/sbin/squid -D -SY
 ```
 
-=======
->>>>>>> 5ca4173f7f35016b67d4704f45f730a6af7e6da5
