@@ -9,10 +9,7 @@ RUN			./configure '--prefix=/opt/squid/' '--enable-epoll' '--enable-gnuregex' \
 			'--with-aio' '--with-dl' '--with-large-files' '--with-maxfd=65536' '--enable-storeio=ufs,coss' \
 			'--with-aufs-threads=100' '--enable-coss-aio-ops' '--enable-x-accelerator-vary'
 RUN			make && make install
-<<<<<<< HEAD
 RUN			chown -R nobody /opt/squid/
-=======
->>>>>>> 5ca4173f7f35016b67d4704f45f730a6af7e6da5
 COPY		squid.conf /opt/squid/etc/squid.conf
 VOLUME 		["/data"]
 EXPOSE 		3128
