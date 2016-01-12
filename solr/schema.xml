@@ -130,6 +130,10 @@
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
       </analyzer>
     </fieldType>
+
+    <fieldType name="text_ik" class="solr.TextField">   
+      <analyzer class="org.wltea.analyzer.lucene.IKAnalyzer"/>   
+    </fieldType> 
   </types>
 
   <fields>
@@ -155,13 +159,13 @@
 
     <field name="is_selection" type="boolean" indexed="true" stored="true" multiValued="false" />
 
-    <field name="author" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="author" type="text_ik" indexed="true" stored="true" multiValued="false" />
 
-    <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="text" type="text_ik" indexed="true" stored="true" multiValued="false" />
 
     <field name="title_auto" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
-    <field name="title" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="title" type="text_ik" indexed="true" stored="true" multiValued="false" />
 
     <field name="article_id" type="long" indexed="true" stored="true" multiValued="false" />
 
@@ -173,7 +177,7 @@
 
     <field name="like_count" type="long" indexed="true" stored="true" multiValued="false" />
 
-    <field name="user" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="user" type="text_ik" indexed="true" stored="true" multiValued="false" />
 
     <field name="created_time" type="date" indexed="true" stored="true" multiValued="false" />
 
