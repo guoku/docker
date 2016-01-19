@@ -185,7 +185,7 @@
 
     <field name="tag_auto" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
-    <field name="name" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="name" type="text_ik" indexed="true" stored="true" multiValued="false" />
 
     <field name="fans_count" type="long" indexed="true" stored="true" multiValued="false" />
 
