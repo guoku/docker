@@ -20,5 +20,5 @@ COPY		stopword.dic /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/
 COPY		ext.dic /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/ext.dic
 EXPOSE		8983
 WORKDIR		/data/solr-4.10.4/
-ENTRYPOINT	["/data/solr-4.10.4/bin/solr", "start", "-f", "-m", "8g"]
+#ENTRYPOINT	["/data/solr-4.10.4/bin/solr", "start", "-f", "-m", "8g"]
 
