@@ -12,3 +12,10 @@ docker exec ${docker-name} /opt/squid/sbin/squid -z
 docker exec ${docker-name} /opt/squid/sbin/squid -D -SY
 ```
 
+* install rabbitMQ
+
+```
+docker exec ${docker-name} rabbitmqctl add_vhost 'raspberry'
+docker exec ${docker-name} rabbitmqctl add_user 'raspberry' 'raspberry1@#'
+docker exec ${docker-name} rabbitmqctl set_permissions -p raspberry raspberry '.*' '.*' '.*'
+```
