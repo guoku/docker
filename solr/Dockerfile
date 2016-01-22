@@ -10,13 +10,14 @@ ENV			PATH=${JAVA_HOME}/bin:$PATH
 
 ADD			solr-4.10.4.tgz /data/
 COPY		schema.xml /data/solr-4.10.4/example/solr/collection1/conf/schema.xml
-COPY		IKAnalyzer.cfg.xml /data/solr-4.10.4/example/solr/collection1/conf/IKAnalyzer.cfg.xml
-COPY		stopword.dic /data/solr-4.10.4/example/solr/collection1/conf/stopword.dic
 RUN			mkdir -p /data/solr-4.10.4/example/solr-webapp/webapp/
 WORKDIR		/data/solr-4.10.4/example/solr-webapp/webapp
 RUN			jar xf /data/solr-4.10.4/example/webapps/solr.war
 COPY		IKAnalyzer2012FF_u1.jar /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/lib/IKAnalyzer2012FF_u1.jar
-COPY		ext.dic /data/solr-4.10.4/example/solr/collection1/conf/ext.dic
+RUN			mkdir -p /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes
+COPY		IKAnalyzer.cfg.xml /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/IKAnalyzer.cfg.xml
+COPY		stopword.dic /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/stopword.dic
+COPY		ext.dic /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/ext.dic
 EXPOSE		8983
 WORKDIR		/data/solr-4.10.4/
 ENTRYPOINT	["/data/solr-4.10.4/bin/solr", "start", "-f", "-m", "8g"]
