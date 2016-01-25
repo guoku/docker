@@ -132,7 +132,7 @@
     </fieldType>
 
     <fieldType name="text_ik" class="solr.TextField">   
-      <analyzer class="org.wltea.analyzer.lucene.IKAnalyzer"/>   
+      <analyzer class="org.wltea.analyzer.lucene.IKAnalyzer"/>    
     </fieldType> 
   </types>
 
@@ -175,8 +175,12 @@
 
     <field name="price" type="float" indexed="true" stored="true" multiValued="false" />
 
+    <field name="brand" type="text_ik" indexed="true" stored="true" multiValued="false" />
+
     <field name="title_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
+    <field name="brand_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    
     <field name="like_count" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="user" type="text_ik" indexed="true" stored="true" multiValued="false" />
