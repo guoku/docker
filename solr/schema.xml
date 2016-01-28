@@ -132,7 +132,7 @@
     </fieldType>
 
     <fieldType name="text_ik" class="solr.TextField">   
-      <analyzer class="org.wltea.analyzer.lucene.IKAnalyzer"/>    
+      <analyzer class="org.wltea.analyzer.lucene.IKSynonymAnalyzer"/>
     </fieldType> 
   </types>
 
@@ -189,6 +189,8 @@
 
     <field name="note_count" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="name_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="tag_auto" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
     <field name="name" type="text_ik" indexed="true" stored="true" multiValued="false" />
@@ -208,6 +210,6 @@
   <defaultSearchField>text</defaultSearchField>
 
   <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
-  <solrQueryParser defaultOperator="AND"/>
+  <solrQueryParser defaultOperator="OR"/>
 </schema>
 
