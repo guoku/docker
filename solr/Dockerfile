@@ -19,8 +19,8 @@ RUN			mkdir -p /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes
 COPY		IKAnalyzer.cfg.xml /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/IKAnalyzer.cfg.xml
 COPY		stopword.dic /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/stopword.dic
 COPY		ext.dic /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/ext.dic
+COPY		brand.dic /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/brand.dic
 COPY		synonyms.dic /data/solr-4.10.4/example/solr-webapp/webapp/WEB-INF/classes/synonyms.dic
 EXPOSE		8983
 WORKDIR		/data/solr-4.10.4/
-#ENTRYPOINT	["/data/solr-4.10.4/bin/solr", "start", "-f", "-m", "8g"]
-
+ENTRYPOINT	["/data/solr-4.10.4/bin/solr", "start", "-f", "-m", "8g"]
