@@ -187,6 +187,8 @@
 
     <field name="created_time" type="date" indexed="true" stored="true" multiValued="false" />
 
+    <field name="entity_hash" type="text_en" indexed="true" stored="true" multiValued="false" />
+    
     <field name="note_count" type="long" indexed="true" stored="true" multiValued="false" />
 
     <field name="name_exact" type="string" indexed="true" stored="true" multiValued="false" />
