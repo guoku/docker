@@ -1,0 +1,17 @@
+web:
+  build: .
+  environment:
+    WEB_CONCURRENCY: 3
+    PW_SELENIUM_DRIVER: selenium
+
+  ports:
+    - "5000:5000"
+#  command: python app.py
+
+  links:
+    - selenium
+
+selenium:
+  image: selenium/standalone-chrome
+  ports:
+    - "4444:4444"

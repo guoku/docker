@@ -1,0 +1,15 @@
+.idea
+*.rdb
+*.pid
+*.db
+*.pyc
+__pycache__
+.DS_Store
+venv/
+env/
+
+images/
+.jpg
+.DS_Store
+.log
+
