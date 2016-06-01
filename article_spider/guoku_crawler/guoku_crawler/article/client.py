@@ -105,8 +105,8 @@ class WeiXinClient(BaseClient):
     def __init__(self):
         super(WeiXinClient, self).__init__()
         self._sg_user = None
-        self.headers['Cookie'] ='SUV=1387161004695182; lastdomain=null; ssuid=1407346305; pgv_pvi=5216948224; pgv_si=s6847528960; pid=ask.xgzs.lddj; cid=w.search.yjjlink; GOTO=Af90017; ss_pidf=1; ss_cidf=1; SEID=000000004658860A2AFF0B10000B66B8; CXID=0A522AD3998C91A8993D3877F703A871; SUID=F2F4C66F506C860A5667DB8B000E648F; PHPSESSID=b7oek1dhh4ks6dl3fk453hisa7; ABTEST=8|1461035006|v1; weixinIndexVisited=1; JSESSIONID=aaaqBvaz15csY4qZ9lPqv; IPLOC=CN1100; ad=MQpZyZllll2QBdmalllllVtkynYlllllbDb1Dkllll9lllllpZlll5@@@@@@@@@@; ld=kyllllllll2gaIxElllllVtm647lllllToVlakllll9llllljllll5@@@@@@@@@@; SNUID=4F20E0BE6165532C39712CD46183AAFA; sct=141'
-        self.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'
+        self.headers['Cookie'] ='SUV=1387161004695182; lastdomain=null; ssuid=1407346305; pgv_pvi=5216948224; pgv_si=s6847528960; pid=ask.xgzs.lddj; cid=w.search.yjjlink; GOTO=Af90017; ss_pidf=1; ss_cidf=1; SEID=000000004658860A2AFF0B10000B66B8; CXID=0A522AD3998C91A8993D3877F703A871; PHPSESSID=b7oek1dhh4ks6dl3fk453hisa7; weixinIndexVisited=1; JSESSIONID=aaaqBvaz15csY4qZ9lPqv; usid=1Aan8ijzyktfZRaL; ld=Ekllllllll2gaIxElllllVtCKx9lllllToVlakllll9lllllRylll5@@@@@@@@@@; ABTEST=0|1464601630|v1; ad=vLpZyZllll2QBdmalllllVN2o47lllllbDb1Dkllllwlllll4Zlll5@@@@@@@@@@; SUID=F2F4C66F506C860A5667DB8B000E648F; SUIR=1464769969; SNUID=8E3786CBA1A59593F695750CA136DA41; sct=148; IPLOC=CN; LSTMV=771%2C191; LCLKINT=2296'
+        self.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/53'
 
 
     @property
@@ -136,12 +136,12 @@ class WeiXinClient(BaseClient):
                                                  hooks, stream, verify,
                                                  cert, json)
 
-        # logger.warning('------- requesting -------')
-        # logger.warning('url :  %s' % url)
-        # logger.warning('cooke : %s' %self.headers['Cookie'][:50] or 'No cookie')
-        # logger.warning('user agent : %s' %self.headers['User-Agent'][:50] or 'No UA')
-        # # logger.warning('content : %s' % resp.text)
-        # logger.warning('_______ requesting end -----')
+        logger.warning('------- requesting -------')
+        logger.warning('url :  %s' % url)
+        logger.warning('cooke : %s' %self.headers['Cookie'][:50] or 'No cookie')
+        logger.warning('user agent : %s' %self.headers['User-Agent'][:50] or 'No UA')
+        # logger.warning('content : %s' % resp.text)
+        logger.warning('_______ requesting end -----')
 
         if stream:
             return resp
