@@ -1,5 +1,5 @@
 FROM python:2.7
-MAINTAINER judy.programmer@gmail.com
+MAINTAINER anchen@guoku.com
 EXPOSE 5555
 
 ENV GC_DEBUG=False

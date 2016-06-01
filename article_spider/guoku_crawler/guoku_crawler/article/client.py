@@ -136,12 +136,12 @@ class WeiXinClient(BaseClient):
                                                  hooks, stream, verify,
                                                  cert, json)
 
-        logger.warning('------- requesting -------')
-        logger.warning('url :  %s' % url)
-        logger.warning('cooke : %s' %self.headers['Cookie'][:50] or 'No cookie')
-        logger.warning('user agent : %s' %self.headers['User-Agent'][:50] or 'No UA')
-        # logger.warning('content : %s' % resp.text)
-        logger.warning('_______ requesting end -----')
+        # logger.warning('------- requesting -------')
+        # logger.warning('url :  %s' % url)
+        # logger.warning('cooke : %s' %self.headers['Cookie'][:50] or 'No cookie')
+        # logger.warning('user agent : %s' %self.headers['User-Agent'][:50] or 'No UA')
+        # # logger.warning('content : %s' % resp.text)
+        # logger.warning('_______ requesting end -----')
 
         if stream:
             return resp
