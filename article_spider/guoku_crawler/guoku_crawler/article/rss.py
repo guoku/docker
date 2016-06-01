@@ -40,9 +40,13 @@ def crawl_rss_list(authorized_user_id, page=1):
     }
 
     go_next = True
-    response = rss_client.get(blog_address,
+    try:
+        response = rss_client.get(blog_address,
                               params=params
                               )
+    except Exception as e:
+        logger.error(e.message)
+        return
     xml_content = BeautifulSoup(response.utf8_content, 'xml')
     # REFACTOR HERE
     # TODO :  parser
