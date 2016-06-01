@@ -38,7 +38,25 @@ def crawl_rss_list(authorized_user_id, page=1):
         'feed': 'rss2',
         'paged': page
     }
+    get_rss_list(blog_address, params, authorized_user, page)
+    if authorized_user.rss_url == 'http://blog.kakkoko.com/1/feed':
+        try:
+            while True:
+                page_num = blog_address.split('/')[-2]
+                next_page_num = str(int(page_num)+1)
+                blog_address_split = blog_address.split('/')
+                blog_address_split[-2] = next_page_num
+                blog_address = '/'.join(blog_address_split)
+                if rss_client.get(blog_address).status_code == 200:
+                    get_rss_list(blog_address, params, authorized_user, page)
+                else:
+                    break
+        except Exception as e:
+            logger.error(e.message)
+            return
 
+
+def get_rss_list(blog_address, params, authorized_user, page):
     go_next = True
     try:
         response = rss_client.get(blog_address,
@@ -86,6 +104,8 @@ def crawl_rss_list(authorized_user_id, page=1):
             logger.warning('article dup %s' %article.id)
             pass
         logger.info('article %s finished.', article.id)
+
+
 
     if len(item_list) < 10:
         go_next = False
