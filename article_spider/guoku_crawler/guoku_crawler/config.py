@@ -76,9 +76,9 @@ FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o777
 FILE_UPLOAD_PERMISSIONS = 0o777
 MEDIA_URL = 'images/'
 STATIC_URL = 'http://static.guoku.com/static/v4/dafb5059ae45f18b0eff711a38de3d59b95bad4c/'
-DEFAULT_ARTICLE_COVER = "%s%s" % (
-    STATIC_URL, 'images/article/default_cover.jpg'
-)
+DEFAULT_ARTICLE_COVER = "http://imgcdn.guoku.com/images/ee7dd4a43d75ab28b3c65cc960429724.jpeg"
+
+
 
 # System
 DEBUG = True
