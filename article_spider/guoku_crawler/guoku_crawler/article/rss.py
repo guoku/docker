@@ -18,7 +18,7 @@ from guoku_crawler.models import CoreArticle
 from guoku_crawler.models import CoreAuthorizedUserProfile as Profile
 from guoku_crawler.config import logger
 from guoku_crawler.exceptions import Retry
-
+from lxml.html.clean import Cleaner
 import hashlib
 rss_client = RSSClient()
 image_host = getattr(config, 'IMAGE_HOST', None)
@@ -82,12 +82,14 @@ def get_rss_list(blog_address, params, authorized_user, page):
             go_next = False
             logger.info('ARTICLE EXIST :%s'  % title)
         except NoResultFound:
-
+            content = item.encoded.string if item.encoded else item.description.text
+            cleaner = Cleaner(kill_tags=['script', 'iframe'])
+            content = cleaner.clean_html(content)
             article = CoreArticle(
                 creator=authorized_user.user,
                 identity_code=identity_code,
                 title=title,
-                content=item.encoded.string if item.encoded else item.description.text,
+                content=content,
                 updated_datetime=datetime.datetime.now(),
                 created_datetime=parser.parse(item.pubDate.text),
                 publish=CoreArticle.published,
