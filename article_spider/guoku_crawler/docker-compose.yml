@@ -1,0 +1,53 @@
+
+worker:
+  build: .
+  environment: &env
+    GK_CONFIG_REDIS_HOST: 'redis'
+    GK_BROKER_URL: 'redis://redis:6379/0'
+    GK_CELERY_RESULT_BACKEND: 'redis://redis:6379/0'
+    GK_PHANTOM_SERVER: 'http://phantomwebserver:5000'
+    GK_CELERYD_CONCURRENCY: 1
+  links:
+    - redis
+    - phantomwebserver
+  command: worker
+
+cookie_worker:
+  build: .
+  environment: *env
+  links:
+    - redis
+    - phantomwebserver
+  command: cookie_worker
+
+beat:
+  build: .
+  environment: *env
+  links:
+    - redis
+    - phantomwebserver
+  command: beat
+
+flower:
+  build: .
+  environment: *env
+  links:
+    - redis
+    - phantomwebserver
+  command: flower
+
+redis:
+  image: redis
+
+phantomwebserver:
+  build: ../phantom-webserver
+  environment:
+    WEB_CONCURRENCY: 3
+    PW_SELENIUM_DRIVER: selenium
+  links:
+    - selenium
+
+
+selenium:
+  image: selenium/standalone-chrome
+
