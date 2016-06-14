@@ -64,7 +64,11 @@ class BaseClient(requests.Session):
 
 
 class RSSClient(BaseClient):
-    pass
+    def __init__(self):
+        super(RSSClient, self).__init__()
+        self._sg_user = None
+        self.headers['Cookie'] = 'SUV=1387161004695182; lastdomain=null; ssuid=1407346305; pgv_pvi=5216948224; pgv_si=s6847528960; pid=ask.xgzs.lddj; cid=w.search.yjjlink; GOTO=Af90017; ss_pidf=1; ss_cidf=1; SEID=000000004658860A2AFF0B10000B66B8; CXID=0A522AD3998C91A8993D3877F703A871; SUID=F2F4C66F506C860A5667DB8B000E648F; PHPSESSID=b7oek1dhh4ks6dl3fk453hisa7; ABTEST=8|1461035006|v1; weixinIndexVisited=1; JSESSIONID=aaaqBvaz15csY4qZ9lPqv; IPLOC=CN1100; ad=MQpZyZllll2QBdmalllllVtkynYlllllbDb1Dkllll9lllllpZlll5@@@@@@@@@@; ld=kyllllllll2gaIxElllllVtm647lllllToVlakllll9llllljllll5@@@@@@@@@@; SNUID=4F20E0BE6165532C39712CD46183AAFA; sct=141'
+        self.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'
 
 
 class ProxyTestClient(requests.Session):
