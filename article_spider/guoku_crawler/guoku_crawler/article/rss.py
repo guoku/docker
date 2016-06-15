@@ -239,7 +239,7 @@ def is_valid_page(url, params=None):
         return True
     return False
 @app.task(base=RequestsTask, name='rss.new_crawl_list')
-def crawl_rss(authorized_user_id):
+def crawl_rss_list(authorized_user_id):
 
     authorized_user = session.query(Profile).get(authorized_user_id)
     logger.info('start to crawle rss link %s' % authorized_user.rss_url)
