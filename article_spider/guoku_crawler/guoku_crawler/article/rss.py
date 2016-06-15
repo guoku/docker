@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-from hashlib import md5
 
 import datetime
 from bs4 import BeautifulSoup
 from dateutil import parser
-from guoku_crawler.article.weixin import caculate_identity_code, createArticle, is_article_exist
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from guoku_crawler.article.weixin import is_article_exist
 
 from guoku_crawler import config
 from guoku_crawler.article.client import RSSClient
@@ -30,98 +28,98 @@ def caculate_rss_identity_code(title, userid, item_link):
     title_hash = hashlib.sha1(title.encode('utf-8')).hexdigest()
     return "%s_%s_%s" % (userid,title_hash,link_hash)
 
-@app.task(base=RequestsTask, name='rss.crawl_list')
-def crawl_rss_list(authorized_user_id, page=1, crawl_all=False):
-    authorized_user = session.query(Profile).get(authorized_user_id)
-    blog_address = authorized_user.rss_url
-    params = {
-        'feed': 'rss2',
-        'paged': page
-    }
-    if crawl_all:
-        # get_all_rss_articles(blog_address, params, authorized_user, page)
-        pass
-    else:
-        get_rss_list(blog_address, params, authorized_user, page)
-    if authorized_user.rss_url == 'http://blog.kakkoko.com/1/feed':
-        try:
-            while True:
-                page_num = blog_address.split('/')[-2]
-                next_page_num = str(int(page_num)+1)
-                blog_address_split = blog_address.split('/')
-                blog_address_split[-2] = next_page_num
-                blog_address = '/'.join(blog_address_split)
-                if rss_client.get(blog_address).status_code == 200:
-                    get_rss_list(blog_address, params, authorized_user, page)
-                else:
-                    break
-        except Exception as e:
-            logger.error(e.message)
-            return
+# @app.task(base=RequestsTask, name='rss.crawl_list')
+# def crawl_rss_list(authorized_user_id, page=1, crawl_all=False):
+#     authorized_user = session.query(Profile).get(authorized_user_id)
+#     blog_address = authorized_user.rss_url
+#     params = {
+#         'feed': 'rss2',
+#         'paged': page
+#     }
+#     if crawl_all:
+#         # get_all_rss_articles(blog_address, params, authorized_user, page)
+#         pass
+#     else:
+#         get_rss_list(blog_address, params, authorized_user, page)
+#     if authorized_user.rss_url == 'http://blog.kakkoko.com/1/feed':
+#         try:
+#             while True:
+#                 page_num = blog_address.split('/')[-2]
+#                 next_page_num = str(int(page_num)+1)
+#                 blog_address_split = blog_address.split('/')
+#                 blog_address_split[-2] = next_page_num
+#                 blog_address = '/'.join(blog_address_split)
+#                 if rss_client.get(blog_address).status_code == 200:
+#                     get_rss_list(blog_address, params, authorized_user, page)
+#                 else:
+#                     break
+#         except Exception as e:
+#             logger.error(e.message)
+#             return
 
 
-def get_rss_list(blog_address, params, authorized_user, page):
-    go_next = True
-    try:
-        response = rss_client.get(blog_address,
-                              params=params
-                              )
-    except Exception as e:
-        logger.error(e.message)
-        return
-    xml_content = BeautifulSoup(response.utf8_content, 'xml')
-    # REFACTOR HERE
-    # TODO :  parser
-    item_list = xml_content.find_all('item')
-    for item in item_list:
-        title = item.title.text
-        identity_code = caculate_rss_identity_code(title,authorized_user.user.id,item.link.text)
-        try:
-            article = session.query(CoreArticle).filter_by(
-                identity_code=identity_code,
-                creator=authorized_user.user
-            ).one()
-            go_next = False
-            logger.info('ARTICLE EXIST :%s'  % title)
-        except NoResultFound:
-            content = item.encoded.string if item.encoded else item.description.text
-            cleaner = Cleaner(kill_tags=['script', 'iframe'])
-            content = cleaner.clean_html(content)
-            article = CoreArticle(
-                creator=authorized_user.user,
-                identity_code=identity_code,
-                title=title,
-                content=content,
-                updated_datetime=datetime.datetime.now(),
-                created_datetime=parser.parse(item.pubDate.text),
-                publish=CoreArticle.published,
-                cover=config.DEFAULT_ARTICLE_COVER,
-                origin_url=item.link.text,
-                source=2,# source 2 is from rss.
-            )
-            session.add(article)
-            session.commit()
-            crawl_rss_images.delay(article.content, article.id)   #Todo test使用, 生产环境需取消注释
-
-
-        except MultipleResultsFound as e:
-            logger.warning('article dup %s' %article.id)
-            pass
-        logger.info('article %s finished.', article.id)
-
-
-
-    if len(item_list) < 10:
-        go_next = False
-        logger.info('current page is the last page; will not go next page')
-
-    page += 1
-    if go_next:
-        logger.info('prepare to get next page: %d', page)
-        crawl_rss_list.delay(authorized_user_id=authorized_user.id,
-                             page=page)
-        return
-    return
+# def get_rss_list(blog_address, params, authorized_user, page):
+#     go_next = True
+#     try:
+#         response = rss_client.get(blog_address,
+#                               params=params
+#                               )
+#     except Exception as e:
+#         logger.error(e.message)
+#         return
+#     xml_content = BeautifulSoup(response.utf8_content, 'xml')
+#     # REFACTOR HERE
+#     # TODO :  parser
+#     item_list = xml_content.find_all('item')
+#     for item in item_list:
+#         title = item.title.text
+#         identity_code = caculate_rss_identity_code(title,authorized_user.user.id,item.link.text)
+#         try:
+#             article = session.query(CoreArticle).filter_by(
+#                 identity_code=identity_code,
+#                 creator=authorized_user.user
+#             ).one()
+#             go_next = False
+#             logger.info('ARTICLE EXIST :%s'  % title)
+#         except NoResultFound:
+#             content = item.encoded.string if item.encoded else item.description.text
+#             cleaner = Cleaner(kill_tags=['script', 'iframe'])
+#             content = cleaner.clean_html(content)
+#             article = CoreArticle(
+#                 creator=authorized_user.user,
+#                 identity_code=identity_code,
+#                 title=title,
+#                 content=content,
+#                 updated_datetime=datetime.datetime.now(),
+#                 created_datetime=parser.parse(item.pubDate.text),
+#                 publish=CoreArticle.published,
+#                 cover=config.DEFAULT_ARTICLE_COVER,
+#                 origin_url=item.link.text,
+#                 source=2,# source 2 is from rss.
+#             )
+#             session.add(article)
+#             session.commit()
+#             crawl_rss_images.delay(article.content, article.id)   #Todo test使用, 生产环境需取消注释
+#
+#
+#         except MultipleResultsFound as e:
+#             logger.warning('article dup %s' %article.id)
+#             pass
+#         logger.info('article %s finished.', article.id)
+#
+#
+#
+#     if len(item_list) < 10:
+#         go_next = False
+#         logger.info('current page is the last page; will not go next page')
+#
+#     page += 1
+#     if go_next:
+#         logger.info('prepare to get next page: %d', page)
+#         crawl_rss_list.delay(authorized_user_id=authorized_user.id,
+#                              page=page)
+#         return
+#     return
 
 @app.task(base=RequestsTask, name='rss.crawl_rss_images')
 def crawl_rss_images(content_string, article_id):
@@ -184,7 +182,7 @@ class RssParser(object):
 
 
     def can_handle(self, url):
-        if url == 'http://blog.kakkoko.com/1/feed':
+        if url in ('http://blog.kakkoko.com/1/feed'):
             return False
         return True
 
@@ -231,7 +229,6 @@ class KakkokoParser(RssParser):
         return urls
 
 
-
 def is_valid_page(url, params=None):
     try:
         response = rss_client.get(url, params=params)
@@ -250,13 +247,47 @@ def crawl_rss(authorized_user_id):
     parser = RssParser(rss_url, authorized_user)
     if parser.can_handle(rss_url):
         pages = parser.get_pages()
-        crawl_rss_process(pages, authorized_user, parser)
+        if rss_url == 'http://www.mensweardog.cn/feed':
+            crawl_mensweardog(pages, authorized_user, parser)
+        else:
+            crawl_rss_process(pages, authorized_user, parser)
     else:
         logger.error('default parser went wrong. Try another parser')
         if rss_url == 'http://blog.kakkoko.com/1/feed':
             parser = KakkokoParser(rss_url, authorized_user)
             pages = parser.get_pages()
             crawl_rss_process(pages, authorized_user, parser)
+
+def crawl_mensweardog(pages, authorized_user, parser):
+    '''
+    this rss don't contain full content, need to crawle from article url
+    :param pages:
+    :param authorized_user:
+    :param parser:
+    :return:
+    '''
+    for page in pages:
+        logger.info('prepare to get next page: %s', page)
+        articles = parser.parse(page)
+        for article in articles:
+            if not is_article_exist(article, authorized_user):
+                try:
+                    origin_url = article['origin_url']
+                    response = rss_client.get(origin_url)
+                    article_soup = BeautifulSoup(response.utf8_content, from_encoding='utf8', isHTML=True)
+                    content = article_soup.select(".entry-content")[0]
+                    cleaner = Cleaner(kill_tags=['script', 'iframe'])
+                    content = cleaner.clean_html(unicode(content))
+                    article = create_rss_article(article)
+                    article.content = content
+                    crawl_rss_images.delay(article.content, article.id)
+                except Exception as e:
+                    logger.error(e.message)
+        if is_last_page_crawled(pages[-1], authorized_user, parser):
+            logger.info('-' * 80)
+            logger.info('all the articles have beed crawled for authorized user %d' % authorized_user.id)
+            logger.info('-' * 80)
+            break
 
 
 def crawl_rss_process(pages, authorized_user, parser):
