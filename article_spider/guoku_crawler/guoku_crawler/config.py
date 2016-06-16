@@ -10,29 +10,29 @@ import logging
 
 #config for local
 #=========================
-# data_base_ip = '192.168.1.117'
-# data_base_user = 'guoku'
-# data_base_pass = 'guoku!@#'
-# phantom_server = 'http://phantomwebserver:5000'
-# image_host = 'http://127.0.0.1:9766/'
-# image_path = 'images/'
-# local_file = True
-# celery_eager = True
-# celery_concurrency  = 1
-# request_interval = 1
-
-#config for remote test 48
-#==========================
-data_base_ip = '10.0.2.125'
+data_base_ip = '192.168.1.117'
 data_base_user = 'guoku'
-data_base_pass = 'guoku1@#'
+data_base_pass = 'guoku!@#'
 phantom_server = 'http://phantomwebserver:5000'
-image_host = 'http://imgcdn.guoku.com/'
+image_host = 'http://127.0.0.1:9766/'
 image_path = 'images/'
-local_file = False
+local_file = True
 celery_eager = True
 celery_concurrency  = 1
 request_interval = 1
+
+#config for remote test 48
+#==========================
+# data_base_ip = '10.0.2.125'
+# data_base_user = 'guoku'
+# data_base_pass = 'guoku1@#'
+# phantom_server = 'http://phantomwebserver:5000'
+# image_host = 'http://imgcdn.guoku.com/'
+# image_path = 'images/'
+# local_file = FalseSQLite - killer
+# celery_eager = True
+# celery_concurrency  = 1
+# request_interval = 6
 
 
 #config for remote production 49
@@ -134,7 +134,7 @@ REQUEST_INTERVAL = request_interval
 CELERYBEAT_SCHEDULE = {
     'crawl_all_articles': {
         'task': 'crawl_articles',
-        'schedule': crontab(minute=59, hour='*/4')
+        'schedule': crontab(minute=59, hour='*/5')
     },
 }
 

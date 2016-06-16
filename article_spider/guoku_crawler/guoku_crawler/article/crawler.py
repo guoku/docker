@@ -3,15 +3,16 @@
 from __future__ import absolute_import
 import datetime
 import time
+
 from sqlalchemy import or_
 
 from guoku_crawler.db import session
 from guoku_crawler.tasks import RequestsTask, app
-from guoku_crawler.article.rss import crawl_rss_list
+from guoku_crawler.article.rss import  crawl_rss_list
 from guoku_crawler.article.weixin import crawl_user_weixin_articles_by_authorized_user_id
 from guoku_crawler.models import CoreGkuser, AuthGroup, CoreArticle
 from guoku_crawler.models import CoreAuthorizedUserProfile as Profile
-
+from guoku_crawler.config import logger
 
 yesterday_start = datetime.datetime.combine(
     datetime.date.today() - datetime.timedelta(days=1),
@@ -28,7 +29,11 @@ def crawl_articles():
     users = get_auth_users()
     for user in users:
         # time.sleep(5)
-        crawl_user_articles.delay(user.profile.id)
+        try :
+            crawl_user_articles.delay(user.profile.id)
+        except Exception as e :
+            logger.error('fatal , exception when crawl %s' %user)
+
 
 @app.task(base=RequestsTask, name='crawl_user_articles')
 def crawl_user_articles(authorized_user_id):
@@ -57,10 +62,6 @@ def get_auth_users():
 
 
 if __name__ == '__main__':
-    # crawl_rss_list(65)
+    # crawl_rss(60)
     crawl_articles()
-    # crawl_user_weixin_articles_by_authorized_user_id(62)
-
-
-
-
+    print('*' * 80)
