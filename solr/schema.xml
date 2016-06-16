@@ -189,6 +189,8 @@
 
     <field name="user" type="text_ik" indexed="true" stored="true" multiValued="false" />
 
+    <field name="enter_selection_time" type="date" indexed="true" stored="true" multiValued="false" />
+
     <field name="created_time" type="date" indexed="true" stored="true" multiValued="false" />
 
     <field name="price" type="float" indexed="true" stored="true" multiValued="false" />
