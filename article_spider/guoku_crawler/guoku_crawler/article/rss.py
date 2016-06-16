@@ -155,7 +155,7 @@ def crawl_rss_images(content_string, article_id):
 
 #comment here
 
-class RssParser(object):
+class RssBaseParser(object):
     def __init__(self, url, authorized_user):
         self.url = url
         self.authorized_user = authorized_user
@@ -182,9 +182,7 @@ class RssParser(object):
 
 
     def can_handle(self, url):
-        if url in ('http://blog.kakkoko.com/1/feed'):
-            return False
-        return True
+        raise NotImplemented
 
     def parse(self, url):
         try:
@@ -209,8 +207,14 @@ class RssParser(object):
             return []
         return articles
 
+class RssDefaultParser(RssBaseParser):
+    def can_handle(self, url):
+        if url in ('http://blog.kakkoko.com/1/feed'):
+            return False
+        return True
 
-class KakkokoParser(RssParser):
+
+class KakkokoParser(RssBaseParser):
     def can_handle(self, url):
         if url == 'http://blog.kakkoko.com/1/feed':
             return True
@@ -244,19 +248,17 @@ def crawl_rss_list(authorized_user_id):
     authorized_user = session.query(Profile).get(authorized_user_id)
     logger.info('start to crawle rss link %s' % authorized_user.rss_url)
     rss_url = authorized_user.rss_url
-    parser = RssParser(rss_url, authorized_user)
-    if parser.can_handle(rss_url):
-        pages = parser.get_pages()
-        if rss_url == 'http://www.mensweardog.cn/feed':
-            crawl_mensweardog(pages, authorized_user, parser)
-        else:
-            crawl_rss_process(pages, authorized_user, parser)
-    else:
-        logger.error('default parser went wrong. Try another parser')
-        if rss_url == 'http://blog.kakkoko.com/1/feed':
-            parser = KakkokoParser(rss_url, authorized_user)
+    parser_list = [RssDefaultParser, KakkokoParser]
+    for parser in parser_list:
+        parser = parser(rss_url, authorized_user)
+        if parser.can_handle(rss_url):
             pages = parser.get_pages()
-            crawl_rss_process(pages, authorized_user, parser)
+            if rss_url == 'http://www.mensweardog.cn/feed':
+                crawl_mensweardog(pages, authorized_user, parser)
+            else:
+                crawl_rss_process(pages, authorized_user, parser)
+            break
+
 
 def crawl_mensweardog(pages, authorized_user, parser):
     '''
