@@ -1,4 +1,4 @@
-FROM 		ubuntu:latest
+FROM 		ubuntu:14.04
 MAINTAINER	jiaxin	<jiaxin@guoku.com>
 COPY		sources.list.trusty /etc/apt/sources.list
 RUN			apt-get update && apt-get -y install redis-server redis-tools

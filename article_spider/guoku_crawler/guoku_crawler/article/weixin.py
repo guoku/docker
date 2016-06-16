@@ -422,8 +422,8 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
         #todo : mail to admin
     except TooManyRequests as e :
         update_cookie = True
-        logger.warning('sleeping 10s ----------- ')
-        time.sleep(10)
+        logger.warning('sleeping 900s ----------- ')
+        time.sleep(900)
         logger.warning('wake up --------------')
         weixin_client.refresh_cookies()
         logger.warning("too many requests or request expired. %s", e.message)

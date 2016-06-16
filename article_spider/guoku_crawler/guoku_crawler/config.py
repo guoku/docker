@@ -29,10 +29,10 @@ request_interval = 1
 # phantom_server = 'http://phantomwebserver:5000'
 # image_host = 'http://imgcdn.guoku.com/'
 # image_path = 'images/'
-# local_file = False
+# local_file = FalseSQLite - killer
 # celery_eager = True
 # celery_concurrency  = 1
-# request_interval = 1
+# request_interval = 6
 
 
 #config for remote production 49
@@ -76,9 +76,9 @@ FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o777
 FILE_UPLOAD_PERMISSIONS = 0o777
 MEDIA_URL = 'images/'
 STATIC_URL = 'http://static.guoku.com/static/v4/dafb5059ae45f18b0eff711a38de3d59b95bad4c/'
-DEFAULT_ARTICLE_COVER = "http://imgcdn.guoku.com/images/ee7dd4a43d75ab28b3c65cc960429724.jpeg"
-
-
+DEFAULT_ARTICLE_COVER = "%s%s" % (
+    STATIC_URL, 'images/article/default_cover.jpg'
+)
 
 # System
 DEBUG = True
@@ -134,7 +134,7 @@ REQUEST_INTERVAL = request_interval
 CELERYBEAT_SCHEDULE = {
     'crawl_all_articles': {
         'task': 'crawl_articles',
-        'schedule': crontab(minute=59, hour='*/4')
+        'schedule': crontab(minute=59, hour='*/5')
     },
 }
 
