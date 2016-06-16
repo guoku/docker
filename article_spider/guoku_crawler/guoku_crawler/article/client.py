@@ -63,9 +63,6 @@ class BaseClient(requests.Session):
         return resp
 
 
-class RSSClient(BaseClient):
-    pass
-
 
 class ProxyTestClient(requests.Session):
     def request(self, method, url,
@@ -237,3 +234,6 @@ def update_sogou_cookie(sg_user):
 
 
 
+
+class RSSClient(WeiXinClient):
+    pass

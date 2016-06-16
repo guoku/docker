@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     except Exception as e :
 
-        crawl_rss_list(68)
+        crawl_rss_list(76)
 
 
 
