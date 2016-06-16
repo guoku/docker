@@ -3,11 +3,12 @@
 from __future__ import absolute_import
 import datetime
 import time
+
 from sqlalchemy import or_
 
 from guoku_crawler.db import session
 from guoku_crawler.tasks import RequestsTask, app
-from guoku_crawler.article.rss import crawl_rss_list
+from guoku_crawler.article.rss import  crawl_rss_list
 from guoku_crawler.article.weixin import crawl_user_weixin_articles_by_authorized_user_id
 from guoku_crawler.models import CoreGkuser, AuthGroup, CoreArticle
 from guoku_crawler.models import CoreAuthorizedUserProfile as Profile
@@ -57,10 +58,6 @@ def get_auth_users():
 
 
 if __name__ == '__main__':
-    # crawl_rss_list(65)
+    # crawl_rss(60)
     crawl_articles()
-    # crawl_user_weixin_articles_by_authorized_user_id(62)
-
-
-
-
+    print('*' * 80)
