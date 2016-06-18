@@ -20,6 +20,7 @@ local_file = True
 celery_eager = True
 celery_concurrency  = 1
 request_interval = 1
+sleeping_interval = 1
 
 #config for remote test 48
 #==========================
@@ -33,6 +34,7 @@ request_interval = 1
 # celery_eager = True
 # celery_concurrency  = 1
 # request_interval = 6
+# sleeping_interval = 900
 
 
 #config for remote production 49
@@ -47,6 +49,7 @@ request_interval = 1
 # celery_eager = True
 # celery_concurrency  = 1
 # request_interval = 12
+# sleeping_interval = 900
 
 #-------------------------------
 

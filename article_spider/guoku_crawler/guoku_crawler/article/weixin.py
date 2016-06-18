@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 from celery import current_task
 from pymysql.err import InternalError, DatabaseError
 
-from guoku_crawler.config import logger
+from guoku_crawler.config import logger , sleeping_interval
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -242,8 +242,8 @@ def crawl_weixin_single_article_mission(mission, authorized_user_id=None, update
     try :
         response = get_mission_page_content(mission)
     except (TooManyRequests, Expired) as e  :
-        logger.warning('sleeping 600s ')
-        time.sleep(600)
+        logger.warning('sleeping ------- ')
+        time.sleep(sleeping_interval)
         logger.warning('wake up --------------')
         weixin_client.refresh_cookies()
         logger.warning('Too many request for single mission %s ' % mission['content_url'])
@@ -422,8 +422,8 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
         #todo : mail to admin
     except TooManyRequests as e :
         update_cookie = True
-        logger.warning('sleeping 900s ----------- ')
-        time.sleep(900)
+        logger.warning('sleeping  ----------- ')
+        time.sleep(sleeping_interval)
         logger.warning('wake up --------------')
         weixin_client.refresh_cookies()
         logger.warning("too many requests or request expired. %s", e.message)
