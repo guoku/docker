@@ -10,7 +10,7 @@ import logging
 
 #config for local
 #=========================
-data_base_ip = '192.168.1.117'
+data_base_ip = '10.0.0.74'
 data_base_user = 'guoku'
 data_base_pass = 'guoku!@#'
 phantom_server = 'http://phantomwebserver:5000'

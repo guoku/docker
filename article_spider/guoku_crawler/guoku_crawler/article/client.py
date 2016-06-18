@@ -59,7 +59,7 @@ class BaseClient(requests.Session):
             return resp
         resp.utf8_content = resp.content.decode('utf-8')
         resp.utf8_content = resp.utf8_content.rstrip('\n')
-        sleep(config.REQUEST_INTERVAL)
+        # sleep(config.REQUEST_INTERVAL)
         return resp
 
 
