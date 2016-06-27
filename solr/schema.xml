@@ -158,6 +158,8 @@
 
     <field name="read_count" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="last_selection_time" type="date" indexed="true" stored="true" multiValued="false" />
+
     <field name="author" type="text_ik" indexed="true" stored="true" multiValued="false" />
     <!-- <field name="author" type="text_en" indexed="true" stored="true" multiValued="false" /> -->
 
