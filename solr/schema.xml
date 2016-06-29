@@ -166,6 +166,10 @@
     
     <field name="title" type="text_ik" indexed="true" stored="true" multiValued="false" />
     <!-- <field name="title" type="text_en" indexed="true" stored="true" multiValued="false" /> -->
+    
+    <field name="dig_count" type="long" indexed="true" stored="true" multiValued="false" />
+
+    <field name="enter_selection_time" type="date" indexed="true" stored="true" multiValued="false" />
 
     <field name="title_auto" type="edge_ngram" indexed="true" stored="true" multiValued="false" />
 
@@ -189,7 +193,7 @@
 
     <field name="user" type="text_ik" indexed="true" stored="true" multiValued="false" />
 
-    <field name="enter_selection_time" type="date" indexed="true" stored="true" multiValued="false" />
+    <!-- <field name="enter_selection_time" type="date" indexed="true" stored="true" multiValued="false" /> -->
 
     <field name="created_time" type="date" indexed="true" stored="true" multiValued="false" />
 
