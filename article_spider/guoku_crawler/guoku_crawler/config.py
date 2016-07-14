@@ -137,7 +137,7 @@ REQUEST_INTERVAL = request_interval
 CELERYBEAT_SCHEDULE = {
     'crawl_all_articles': {
         'task': 'crawl_articles',
-        'schedule': crontab(minute=59, hour='*/8')
+        'schedule': crontab(minute=59, hour='2')
     },
 }
 
