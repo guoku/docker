@@ -10,7 +10,7 @@ import logging
 
 #config for local
 #=========================
-# data_base_ip = '10.0.0.74'
+# data_base_ip = '192.168.1.117'
 # data_base_user = 'guoku'
 # data_base_pass = 'guoku!@#'
 # phantom_server = 'http://phantomwebserver:5000'
@@ -24,32 +24,32 @@ import logging
 
 #config for remote test 48
 #==========================
-# data_base_ip = '10.0.2.125'
-# data_base_user = 'guoku'
-# data_base_pass = 'guoku1@#'
-# phantom_server = 'http://phantomwebserver:5000'
-# image_host = 'http://imgcdn.guoku.com/'
-# image_path = 'images/'
-# local_file = False
-# celery_eager = True
-# celery_concurrency  = 1
-# request_interval = 6
-# sleeping_interval = 900
-
-
-#config for remote production 49
-#===========================
-data_base_ip = '10.0.2.90'
+data_base_ip = '10.0.2.125'
 data_base_user = 'guoku'
-data_base_pass = 'guoku!@#'
+data_base_pass = 'guoku1@#'
 phantom_server = 'http://phantomwebserver:5000'
 image_host = 'http://imgcdn.guoku.com/'
 image_path = 'images/'
 local_file = False
 celery_eager = True
 celery_concurrency  = 1
-request_interval = 12
+request_interval = 6
 sleeping_interval = 900
+
+
+#config for remote production 49
+#===========================
+# data_base_ip = '10.0.2.90'
+# data_base_user = 'guoku'
+# data_base_pass = 'guoku!@#'
+# phantom_server = 'http://phantomwebserver:5000'
+# image_host = 'http://imgcdn.guoku.com/'
+# image_path = 'images/'
+# local_file = False
+# celery_eager = True
+# celery_concurrency  = 1
+# request_interval = 12
+# sleeping_interval = 900
 
 #-------------------------------
 
