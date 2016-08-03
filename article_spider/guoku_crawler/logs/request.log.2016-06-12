@@ -1,0 +1,132 @@
+[16/06/12 11:26:44.670] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:27:56.63] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:28:22.703] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:28:51.789] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:29:15.346] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:29:17.167] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:29:22.89] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:30:14.49] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:31:22.3] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
+[16/06/12 11:31:35.502] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:31:35.503] WARNING [client:request:137]- url :  http://kamyau.com/feed/
+[16/06/12 11:31:35.504] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:31:35.505] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:31:35.505] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:36:01.758] INFO [rss:crawl_rss_images:195]- fetch_image for article 6992: http://kamyau.com/uploads/2012/guoku-trends-2012.jpg
+[16/06/12 11:36:02.809] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:36:02.810] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2012/guoku-trends-2012.jpg
+[16/06/12 11:36:02.810] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:36:02.811] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:36:02.811] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:36:03.597] INFO [rss:get_rss_list:109]- article 6992 finished.
+[16/06/12 11:36:03.660] INFO [rss:crawl_rss_images:195]- fetch_image for article 6993: http://kamyau.com/uploads/2012/guoku-one.jpg
+[16/06/12 11:36:03.947] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:36:03.948] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2012/guoku-one.jpg
+[16/06/12 11:36:03.948] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:36:03.949] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:36:03.949] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:36:05.342] INFO [rss:get_rss_list:109]- article 6993 finished.
+[16/06/12 11:36:05.610] INFO [rss:crawl_rss_images:195]- fetch_image for article 6994: http://kamyau.com/uploads/2012/outlook-magazine-self-publishing.jpg
+[16/06/12 11:36:05.883] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:36:05.885] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2012/outlook-magazine-self-publishing.jpg
+[16/06/12 11:36:05.886] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:36:05.887] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:36:05.888] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:36:11.143] INFO [rss:get_rss_list:109]- article 6994 finished.
+[16/06/12 11:36:11.222] INFO [rss:crawl_rss_images:195]- fetch_image for article 6995: http://kamyau.com/uploads/2011/guoku-iphone-app.jpg
+[16/06/12 11:36:11.814] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:36:11.814] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2011/guoku-iphone-app.jpg
+[16/06/12 11:36:11.815] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:36:11.815] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:36:11.816] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:36:13.746] INFO [rss:get_rss_list:109]- article 6995 finished.
+[16/06/12 11:36:13.804] INFO [rss:crawl_rss_images:195]- fetch_image for article 6996: http://kamyau.com/uploads/2011/guoku-ipad-app.jpg
+[16/06/12 11:36:14.610] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:36:14.611] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2011/guoku-ipad-app.jpg
+[16/06/12 11:36:14.611] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:36:14.612] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:36:14.613] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:05.508] INFO [rss:get_rss_list:109]- article 6996 finished.
+[16/06/12 11:37:05.564] INFO [rss:crawl_rss_images:195]- fetch_image for article 6997: http://kamyau.com/uploads/2010/china-age-china-face.jpg
+[16/06/12 11:37:06.962] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:06.963] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2010/china-age-china-face.jpg
+[16/06/12 11:37:06.964] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:06.964] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:06.965] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:10.509] INFO [rss:get_rss_list:109]- article 6997 finished.
+[16/06/12 11:37:10.567] INFO [rss:crawl_rss_images:195]- fetch_image for article 6998: http://kamyau.com/uploads/2010/join-us.jpg
+[16/06/12 11:37:10.982] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:10.983] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2010/join-us.jpg
+[16/06/12 11:37:10.983] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:10.984] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:10.984] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:19.773] INFO [rss:get_rss_list:109]- article 6998 finished.
+[16/06/12 11:37:19.836] INFO [rss:crawl_rss_images:195]- fetch_image for article 6999: http://kamyau.com/uploads/2010/startup-weekend.jpg
+[16/06/12 11:37:21.912] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:21.912] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2010/startup-weekend.jpg
+[16/06/12 11:37:21.913] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:21.914] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:21.914] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:23.353] INFO [rss:crawl_rss_images:195]- fetch_image for article 6999: http://kamyau.com/uploads/2010/startup-weekend-reward.jpg
+[16/06/12 11:37:25.894] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:25.894] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2010/startup-weekend-reward.jpg
+[16/06/12 11:37:25.895] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:25.895] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:25.896] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:31.636] INFO [rss:get_rss_list:109]- article 6999 finished.
+[16/06/12 11:37:31.698] INFO [rss:crawl_rss_images:195]- fetch_image for article 7000: http://kamyau.com/uploads/2010/amagzin.jpg
+[16/06/12 11:37:32.945] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:32.946] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2010/amagzin.jpg
+[16/06/12 11:37:32.946] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:32.947] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:32.948] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:33.997] INFO [rss:get_rss_list:109]- article 7000 finished.
+[16/06/12 11:37:34.64] INFO [rss:crawl_rss_images:195]- fetch_image for article 7001: http://kamyau.com/uploads/2010/magazine-app.jpg
+[16/06/12 11:37:34.437] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:34.438] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2010/magazine-app.jpg
+[16/06/12 11:37:34.438] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:34.439] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:34.439] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:38.778] INFO [rss:get_rss_list:109]- article 7001 finished.
+[16/06/12 11:37:38.779] INFO [rss:get_rss_list:123]- prepare to get next page: 2
+[16/06/12 11:37:45.450] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:45.450] WARNING [client:request:137]- url :  http://kamyau.com/feed/
+[16/06/12 11:37:45.451] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:45.451] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:45.452] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:46.545] INFO [rss:crawl_rss_images:195]- fetch_image for article 7002: http://kamyau.com/uploads/2009/o2-magic-box.jpg
+[16/06/12 11:37:46.929] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:46.929] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2009/o2-magic-box.jpg
+[16/06/12 11:37:46.930] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:46.930] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:46.931] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:48.253] INFO [rss:get_rss_list:109]- article 7002 finished.
+[16/06/12 11:37:48.315] INFO [rss:crawl_rss_images:195]- fetch_image for article 7003: http://kamyau.com/uploads/2009/creators-for-magazine-design.jpg
+[16/06/12 11:37:48.809] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:48.810] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2009/creators-for-magazine-design.jpg
+[16/06/12 11:37:48.810] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:48.811] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:48.812] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:49.494] INFO [rss:get_rss_list:109]- article 7003 finished.
+[16/06/12 11:37:49.553] INFO [rss:crawl_rss_images:195]- fetch_image for article 7004: http://kamyau.com/uploads/2009/we-make-mistake.jpg
+[16/06/12 11:37:49.820] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:49.821] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2009/we-make-mistake.jpg
+[16/06/12 11:37:49.821] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:49.822] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:49.822] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:50.579] INFO [rss:get_rss_list:109]- article 7004 finished.
+[16/06/12 11:37:50.638] INFO [rss:crawl_rss_images:195]- fetch_image for article 7005: http://kamyau.com/uploads/2009/log-to-sir.jpg
+[16/06/12 11:37:51.321] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:51.321] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2009/log-to-sir.jpg
+[16/06/12 11:37:51.322] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:51.322] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:51.323] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:52.277] INFO [rss:get_rss_list:109]- article 7005 finished.
+[16/06/12 11:37:52.335] INFO [rss:crawl_rss_images:195]- fetch_image for article 7006: http://kamyau.com/uploads/2009/modern-weekly.jpg
+[16/06/12 11:37:52.659] WARNING [client:request:136]- ------- requesting -------
+[16/06/12 11:37:52.660] WARNING [client:request:137]- url :  http://kamyau.com/uploads/2009/modern-weekly.jpg
+[16/06/12 11:37:52.661] WARNING [client:request:138]- cooke : SUV=1387161004695182; lastdomain=null; ssuid=14073
+[16/06/12 11:37:52.661] WARNING [client:request:139]- user agent : Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) Ap
+[16/06/12 11:37:52.662] WARNING [client:request:141]- _______ requesting end -----
+[16/06/12 11:37:57.310] INFO [rss:get_rss_list:109]- article 7006 finished.
+[16/06/12 11:37:57.311] INFO [rss:get_rss_list:115]- current page is the last page; will not go next page
