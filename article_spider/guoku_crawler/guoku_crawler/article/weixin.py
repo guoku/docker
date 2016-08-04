@@ -125,7 +125,8 @@ def parse_article_url_list(response):
             or (result.group() is None) \
             or (result.group(1) is None) :
 
-        logger.warning('can not parse article url list')
+        logger.warning('can not parse article url list, will try ten more times to get it. url is %s' % response.request.url)
+        logger.warning('article content is: %s' % response.text)
         return None
 
     msgListString = result.group(1)
@@ -144,7 +145,7 @@ def parse_article_url_list(response):
 
 def get_link_list_url(weixin_id, update_cookie=False):
     params = dict(type='1', ie='utf8', query=weixin_id)
-    logger.info('get weixin list for %s ', weixin_id)
+    logger.info('get weixin article url list for %s ', weixin_id)
 
     # weixin_client.refresh_cookies(update_cookie)
     sg_cookie = weixin_client.headers.get('Cookie')
@@ -275,7 +276,7 @@ def crawl_weixin_single_article_mission(mission, authorized_user_id=None, update
             fetch_user_qrcode_img_for_user(authorized_user_id)
         #     TODO : qrcode
         except Exception as e :
-            logger.error('create Article fail  for auhtorized user %s' %authorized_user_id)
+            logger.error('create Article fail  for auhtorized user %s, %s' % (authorized_user_id, e.message))
 
 def fetch_user_qrcode_img_for_user(authorized_user_id):
     #TODO implement
@@ -294,6 +295,7 @@ def fetch_article_cover(article):
         article.cover = cover
         session.commit()
     except Exception as e :
+        session.rollback()
         logger.warning('get cover fail for article : %s ' % article.title)
 
 
@@ -316,9 +318,12 @@ def fetch_article_image(article):
                         article.cover = gk_img_rc
             content_html = article_soup.decode_contents(formatter="html")
             article.content = content_html
-            session.commit()
-    logger.info('article %s finished.', article.id)
-    print('-' * 80)
+    try:
+        session.commit()
+        logger.info('article %s finished.', article.id)
+        print('-' * 80)
+    except:
+        session.rollback()
 
 
 
@@ -353,8 +358,11 @@ def createArticle(article_dic):
             cover=article_dic['cover'],
             source = 1, #source 1 is from weixin
         )
-    session.add(article)
-    session.commit()
+    try:
+        session.add(article)
+        session.commit()
+    except:
+        session.rollback()
     return article
 
 
@@ -412,6 +420,16 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
     try:
         user_article_mission_list = get_user_article_mission_list(weixin_id, update_cookie=update_cookie)
 
+        for i in range(10):
+            if not user_article_mission_list:
+                logger.info('failed to get article list. Try again')
+                user_article_mission_list = get_user_article_mission_list(weixin_id, update_cookie=update_cookie)
+            else:
+                break
+        if not user_article_mission_list:
+            logger.error("can't get article list for authorized author %s. will skip." % authorized_user_id)
+            return
+
         for article_mission in user_article_mission_list:
             # print article_mission
             crawl_weixin_single_article_mission.delay(article_mission, authorized_user_id, update_cookie=False)
@@ -461,7 +479,10 @@ def get_qr_code(authorized_user_id, qr_code_url):
     if not authorized_user.weixin_qrcode_img:
         qr_code_image = fetch_image(qr_code_url, weixin_client)
         authorized_user.weixin_qrcode_img = qr_code_image
-        session.commit()
+        try:
+            session.commit()
+        except:
+            session.rollback()
 
 
 @app.task(base=RequestsTask, name='weixin.prepare_sogou_cookies')

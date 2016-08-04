@@ -49,7 +49,7 @@ local_file = False
 celery_eager = True
 celery_concurrency  = 1
 request_interval = 15
-sleeping_interval = 15
+sleeping_interval = 900
 
 #-------------------------------
 
@@ -121,7 +121,7 @@ CELERY_ANNOTATIONS = {
         'rate_limit': '30/m',
     },
     'weixin.crawl_list': {
-        'rate_limit': '30/m',
+        'rate_limit': '10/m',
     },
     'weixin.crawl_weixin_article': {
         'rate_limit': '10/m',

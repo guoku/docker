@@ -33,6 +33,9 @@ def crawl_articles():
             crawl_user_articles.delay(user.profile.id)
         except Exception as e :
             logger.error('fatal , exception when crawl %s' %user)
+    logger.info('*'*80)
+    logger.info('this round crawl all articles finished.')
+    logger.info('*' * 80)
 
 
 @app.task(base=RequestsTask, name='crawl_user_articles')
@@ -48,14 +51,19 @@ def crawl_user_articles(authorized_user_id):
 
 
 def get_auth_users():
-    users = session.query(CoreGkuser).filter(
-        CoreGkuser.authorized_profile.any(
-            or_(
-                Profile.weixin_id.isnot(None),
-                Profile.rss_url.isnot(None)
-            )),
-        CoreGkuser.groups.any(AuthGroup.name == 'Author')
-    ).all()
+    try:
+        users = session.query(CoreGkuser).filter(
+            CoreGkuser.authorized_profile.any(
+                or_(
+                    Profile.weixin_id.isnot(None),
+                    Profile.rss_url.isnot(None)
+                )),
+            CoreGkuser.groups.any(AuthGroup.name == 'Author')
+        ).all()
+    except Exception as e:
+        logger.error(e.message)
+        session.rollback()
+        users = get_auth_users()
     return users
 
 
@@ -63,5 +71,6 @@ def get_auth_users():
 
 if __name__ == '__main__':
     # crawl_rss(60)
-    crawl_articles()
+    # crawl_articles()
+    crawl_user_weixin_articles_by_authorized_user_id(31)
     print('*' * 80)

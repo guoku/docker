@@ -140,4 +140,5 @@ def fetch_image(image_url, client, full=True):
         return image_name
 
     except (AttributeError, WandException) as e:
+        session.rollback()
         logging.error('handle image(%s) Error: %s', image_url, e.message)

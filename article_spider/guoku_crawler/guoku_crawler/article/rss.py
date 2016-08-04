@@ -151,7 +151,10 @@ def crawl_rss_images(content_string, article_id):
                         article.cover = full_path
             content_html = article_soup.decode_contents(formatter="html")
             article.content = content_html
-            session.commit()
+    try:
+        session.commit()
+    except:
+        session.rollback()
 
 #comment here
 
@@ -163,6 +166,12 @@ class RssBaseParser(object):
 
     def get_pages(self):
         if is_valid_page(self.url) and not is_valid_page(self.url, params={'paged': self.page}):
+            return [self.url]
+        page1 = self.url
+        page2 = self.url + u'?paged=2'
+        article1 = self.parse(page1)
+        article2 = self.parse(page2)
+        if article1[0]['title'] == article2[0]['title'] and article1[-1]['title'] == article2[-1]['title']:
             return [self.url]
         while True:
             if is_valid_page(self.url, params={'paged': self.page}):
@@ -329,7 +338,10 @@ def create_rss_article(article):
         origin_url=article.get('origin_url'),
         source=article.get('source'),
     )
-    session.add(article)
-    session.commit()
-    logger.info('create article %d, %s' % (article.id, article.title))
+    try:
+        session.add(article)
+        session.commit()
+        logger.info('create article %d, %s' % (article.id, article.title))
+    except:
+        session.rollback()
     return article
