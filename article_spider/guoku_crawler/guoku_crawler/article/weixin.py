@@ -156,21 +156,22 @@ def get_link_list_url(weixin_id, update_cookie=False):
     #debug here
     # raise TooManyRequests()
     # return
+    referer = response.request.url
 
     list_link_url = parse_link_list_for_weixinid(response, weixin_id);
-    return list_link_url
+    return list_link_url, referer
 
 
-def get_link_list_by_url(url):
+def get_link_list_by_url(url, referer):
     sg_cookie = weixin_client.headers.get('Cookie')
-    response = weixin_client.get(url=url, headers={'Cookie':sg_cookie})
+    response = weixin_client.get(url=url, headers={'Cookie':sg_cookie, 'Referer': referer})
     article_url_list = parse_article_url_list(response)
     return article_url_list
 
 
 
 def get_user_article_mission_list(weixin_id, update_cookie=False):
-    link_list_url =  get_link_list_url(weixin_id, update_cookie)
+    link_list_url, referer =  get_link_list_url(weixin_id, update_cookie)
     if link_list_url is None:
         logger.warning('can not find link_list_url for weixin_id : %s' % weixin_id)
         raise  CanNotFindWeixinInSogouException(message='can not find weixin in sogou for wx id : %s ' % weixin_id)
@@ -178,7 +179,7 @@ def get_user_article_mission_list(weixin_id, update_cookie=False):
     else:
         logger.info('link list url for %s is %s' %(weixin_id,link_list_url))
 
-    link_list = get_link_list_by_url(link_list_url)
+    link_list = get_link_list_by_url(link_list_url, referer)
     return link_list
 
 def get_weixin_id_by_authorized_user_id(userid):

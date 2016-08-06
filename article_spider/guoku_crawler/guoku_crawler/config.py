@@ -10,7 +10,7 @@ import logging
 
 #config for local
 #=========================
-# data_base_ip = '10.0.0.74'
+# data_base_ip = '192.168.1.123'
 # data_base_user = 'guoku'
 # data_base_pass = 'guoku!@#'
 # phantom_server = 'http://phantomwebserver:5000'
@@ -33,8 +33,8 @@ import logging
 # local_file = False
 # celery_eager = True
 # celery_concurrency  = 1
-# request_interval = 6
-# sleeping_interval = 900
+# request_interval = 1
+# sleeping_interval = 1
 
 
 #config for remote production 49
@@ -48,8 +48,8 @@ image_path = 'images/'
 local_file = False
 celery_eager = True
 celery_concurrency  = 1
-request_interval = 12
-sleeping_interval = 900
+request_interval = 15
+sleeping_interval = 15
 
 #-------------------------------
 
@@ -135,9 +135,9 @@ CELERY_ANNOTATIONS = {
 }
 REQUEST_INTERVAL = request_interval
 CELERYBEAT_SCHEDULE = {
-    'crawl_all_articles': {
+    'crawl_all_articles_every_night': {
         'task': 'crawl_articles',
-        'schedule': crontab(minute=59, hour='*/8')
+        'schedule': crontab(minute=59, hour=2)
     },
 }
 
