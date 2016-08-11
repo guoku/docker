@@ -3,6 +3,7 @@ click_record:
   environment:
     WEB_CONCURRENCY: 3
 
+
   ports:
     - "7000:7000"
 #  command: python app.py
