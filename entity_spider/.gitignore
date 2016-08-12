@@ -1,0 +1,11 @@
+*.jpg
+*.jpeg
+
+*.pyc
+log/*
+.idea/*
+
+logs/*
+
+logs/
+

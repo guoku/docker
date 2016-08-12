@@ -1,0 +1,18 @@
+
+worker:
+  build: .
+  links:
+    - redis
+  command: worker
+
+
+#
+#beat:
+#  build: .
+#  links:
+#    - redis
+#  command: beat
+
+
+redis:
+  image: redis
