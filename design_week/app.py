@@ -8,6 +8,8 @@ from flask import redirect
 from models import ClickRecord, CoreEntity
 from db import nut_session, db_session
 
+SITE_HOST = 'http://127.0.0.1:8000/'
+
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
@@ -18,7 +20,7 @@ def new_entity_detail(entity_hash):
     entity_id = entity.id
     referer = request.referrer
     save_click_record(entity_id, referer)
-    return redirect("http://127.0.0.1:8000/detail/" + entity_hash)
+    return redirect(SITE_HOST + 'detail/' + entity_hash)
 
 def save_click_record(entity_id, referer):
     try:
