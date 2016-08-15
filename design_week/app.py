@@ -6,31 +6,32 @@ import pytz
 from flask import Flask, request
 from flask import redirect
 from models import ClickRecord, CoreEntity
-from db import nut_session, db_session
+from db import app, db
 
 SITE_HOST = 'http://127.0.0.1:8000/'
 
-app = Flask(__name__)
-app.config['DEBUG'] = True
+# app = Flask(__name__)
+# app.config['DEBUG'] = True
 
 
 @app.route("/jump/entity/<entity_hash>", methods=['GET'])
 def new_entity_detail(entity_hash):
-    entity = nut_session.query(CoreEntity).filter(CoreEntity.entity_hash==entity_hash).first()
+    entity = CoreEntity.query.filter(CoreEntity.entity_hash==entity_hash).first()
     entity_id = entity.id
     referer = request.referrer
-    save_click_record(entity_id, referer)
+    user_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    save_click_record(entity_id, referer, user_ip)
     return redirect(SITE_HOST + 'detail/' + entity_hash)
 
-def save_click_record(entity_id, referer):
+def save_click_record(entity_id, referer, user_ip):
     try:
-        click_record = ClickRecord(entity_id=entity_id, referer=referer,
+        click_record = ClickRecord(entity_id=entity_id, referer=referer, user_ip=user_ip,
                                    created_time=datetime.datetime.now(pytz.timezone('Asia/Shanghai')))
-        db_session.add(click_record)
-        db_session.commit()
-        app.logger.info('save click record SUCCESS. ENTITY ID: %s, REFERER: %s' % (entity_id, referer))
+        db.session.add(click_record)
+        db.session.commit()
+        app.logger.info('save click record SUCCESS. ENTITY ID: %s, REFERER: %s, USER IP: %s' % (entity_id, referer, user_ip))
     except Exception as e:
-        db_session.rollback()
+        db.session.rollback()
         app.logger.error(e.message)
 
 
