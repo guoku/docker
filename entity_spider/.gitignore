@@ -8,4 +8,7 @@ log/*
 logs/*
 
 logs/
+*.log.*
+
+
 
