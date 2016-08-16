@@ -1,0 +1,10 @@
+# coding=utf-8
+pidfile = "gunicorn.pid"
+#logﬁle = "/var/log/gunicorn.log"
+#user = "nobody"
+#group = "nogroup"
+bind="0.0.0.0:7000"
+workers=1
+worker_class = "gevent"
+max_requests = 1024
+keep_alive = 1

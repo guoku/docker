@@ -7,6 +7,7 @@ RUN mkdir /usr/design_week
 WORKDIR /usr/design_week
 ADD requirements.txt ./
 RUN pip install -r requirements.txt
+COPY gunicorn /etc/default/gunicorn
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD . .
-
-CMD gunicorn -b 0.0.0.0:7000 -t 180 --access-logfile "-" app:app
+CMD supervisord
