@@ -30,6 +30,7 @@ def save_click_record(entity_id, referer, user_ip):
         db.session.add(click_record)
         db.session.commit()
         app.logger.info('save click record SUCCESS. ENTITY ID: %s, REFERER: %s, USER IP: %s' % (entity_id, referer, user_ip))
+        db.session.remove()
     except Exception as e:
         db.session.rollback()
         app.logger.error(e.message)
