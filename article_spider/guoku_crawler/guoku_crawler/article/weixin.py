@@ -30,6 +30,7 @@ from guoku_crawler.db import session
 from guoku_crawler.exceptions import TooManyRequests, Expired, Retry ,CanNotFindWeixinInSogouException
 from guoku_crawler.models import CoreArticle
 from guoku_crawler.models import CoreAuthorizedUserProfile as Profile
+from guoku_crawler.mail import send_mail, send_mail_to_masters
 
 
 # sys.setrecursionlimit(5000)
@@ -125,7 +126,9 @@ def parse_article_url_list(response):
             or (result.group() is None) \
             or (result.group(1) is None) :
 
-        logger.warning('can not parse article url list')
+        logger.warning('can not parse article url list \n url: %s' % response.url)
+        send_mail_to_masters(sub='can not parse article url list ',
+                             content='url: %s' %response.url)
         return None
 
     msgListString = result.group(1)
