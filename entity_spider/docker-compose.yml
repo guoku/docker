@@ -7,11 +7,11 @@ worker:
 
 
 #
-#beat:
-#  build: .
-#  links:
-#    - redis
-#  command: beat
+beat:
+  build: .
+  links:
+    - redis
+  command: beat
 
 
 redis:

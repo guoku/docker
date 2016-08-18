@@ -15,23 +15,23 @@ def queryset_iterator(queryset, chunksize=5000):
 
     Note that the implementation of the iterator does not support ordered query sets.
     '''
-    # pk = 0
+    pk = 0
     last_pk = queryset.order_by('-pk')[0].pk
-    # queryset = queryset.order_by('pk')
-    # while pk < last_pk:
-    #     for row in queryset.filter(pk__gt=pk)[:chunksize]:
-    #         pk = row.pk
-    #         yield row
-    #     time.sleep(10)
-    #     gc.collect()
-
-    pk = last_pk
-    while pk > 0 :
-        for row in queryset.order_by('-pk').filter(pk__lt=pk)[:chunksize]:
+    queryset = queryset.order_by('pk')
+    while pk < last_pk:
+        for row in queryset.filter(pk__gt=pk)[:chunksize]:
             pk = row.pk
             yield row
         time.sleep(1)
         gc.collect()
+
+    # pk = last_pk
+    # while pk > 0 :
+    #     for row in queryset.order_by('-pk').filter(pk__lt=pk)[:chunksize]:
+    #         pk = row.pk
+    #         yield row
+    #     time.sleep(1)
+    #     gc.collect()
 
 
 def batch(iterable , bsize):
