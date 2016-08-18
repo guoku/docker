@@ -3,9 +3,9 @@
 
 
 # connect to database core, used for get entity id from entity hash
-data_base_user = 'user1'
-data_base_pass = '123456'
-data_base_ip = '192.168.1.112'
+data_base_user = 'guoku'
+data_base_pass = 'guoku!@#'
+data_base_ip = '10.0.2.95'
 
 DATABASES = {
     'DB_NAME': 'core',
@@ -49,7 +49,7 @@ SQLALCHEMY_BINDS = {
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_BINDS'] = SQLALCHEMY_BINDS
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://dolphin:dolphin123@10.0.2.125:13306/dolphin?charset=utf8mb4"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 

@@ -8,7 +8,7 @@ from flask import redirect
 from models import ClickRecord, CoreEntity
 from db import app, db
 
-SITE_HOST = 'http://127.0.0.1:8000/'
+SITE_HOST = 'http://www.guoku.com/'
 
 # app = Flask(__name__)
 # app.config['DEBUG'] = True

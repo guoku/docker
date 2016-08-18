@@ -10,8 +10,8 @@ from sqlalchemy import (Column, DateTime, ForeignKey, Integer, String, Text, DEC
 from db import db
 
 class CoreEntity(db.Model):
-    __bind_key__ = 'core'
-    __tablename__ = 'core_entity'
+    __bind_key__    = 'core'
+    __tablename__   = 'core_entity'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(ForeignKey('core_gkuser.id'), nullable=True, unique=True)
