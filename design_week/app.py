@@ -16,8 +16,11 @@ SITE_HOST = 'http://www.guoku.com/'
 
 @app.route("/jump/entity/<entity_hash>", methods=['GET'])
 def new_entity_detail(entity_hash):
-    entity = CoreEntity.query.filter(CoreEntity.entity_hash==entity_hash).first()
-    entity_id = entity.id
+    try:
+        entity = CoreEntity.query.filter(CoreEntity.entity_hash==entity_hash).first()
+        entity_id = entity.id
+    except:
+        return redirect(SITE_HOST + 'detail/' + entity_hash)
     referer = request.referrer
     user_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     save_click_record(entity_id, referer, user_ip)
