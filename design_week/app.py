@@ -14,7 +14,7 @@ SITE_HOST = 'http://127.0.0.1:8000/'
 # app.config['DEBUG'] = True
 
 
-@app.route("/jump/entity/<entity_hash>", methods=['GET'])
+@app.route("/jump/entity/<entity_hash>/", methods=['GET'])
 def new_entity_detail(entity_hash):
     try:
         entity = CoreEntity.query.filter(CoreEntity.entity_hash==entity_hash).first()
