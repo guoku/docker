@@ -19,7 +19,8 @@ def new_entity_detail(entity_hash):
     try:
         entity = CoreEntity.query.filter(CoreEntity.entity_hash==entity_hash).first()
         entity_id = entity.id
-    except:
+    except Exception as e:
+        app.logger.error(e.message)
         return redirect(SITE_HOST + 'detail/' + entity_hash)
     referer = request.referrer
     user_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
@@ -40,4 +41,4 @@ def save_click_record(entity_id, referer, user_ip):
 
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', debug=True, port=7000)
+    app.run('0.0.0.0', debug=False, port=7000)
