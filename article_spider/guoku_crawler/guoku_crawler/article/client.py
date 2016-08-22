@@ -109,7 +109,8 @@ class WeiXinClient(BaseClient):
     def __init__(self):
         super(WeiXinClient, self).__init__()
         self._sg_user = None
-        self.headers['Cookie'] ='SUV=1387161004695182; lastdomain=null; ssuid=1407346305; pgv_pvi=5216948224; pgv_si=s6847528960; pid=ask.xgzs.lddj; cid=w.search.yjjlink; GOTO=Af90017; SEID=000000004658860A2AFF0B10000B66B8; CXID=0A522AD3998C91A8993D3877F703A871; PHPSESSID=b7oek1dhh4ks6dl3fk453hisa7; weixinIndexVisited=1; JSESSIONID=aaaqBvaz15csY4qZ9lPqv; usid=1Aan8ijzyktfZRaL; ad=lQpZyZllll2QBdmalllllVN@9W1lllllbDb1Dkllll9llllljllll5@@@@@@@@@@; SUID=F2F4C66F506C860A5667DB8B000E648F; _ga=GA1.2.101216933.1468209473; ss_pidf=1; ss_cidf=1; ABTEST=0|1468382615|v1; ppinf=5|1468387924|1469597524|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MTEyMHx1bmlxbmFtZTowOnxjcnQ6MTA6MTQ2ODM4NzkyNHxyZWZuaWNrOjA6fHVzZXJpZDoyNDpkcmluZDE5NzdAam91cnJhcGlkZS5jb218; pprdig=Iu-6JnosphQmlakx-kwcjsxjjXI5ZlkJgkW9IPOL6-c9xQ1D6DLoWMRbF2ty9ThJD3kUTnRxd08JhqksTX-MaTUhtGKBLMGjSfzW1LtUpRRusk0YNZ2jheQWYyCre8BUgIZjggkArZ8g1uO1eLYw318IVutL0gpMKrHEMuS0MB0; SNUID=AEB5575325201D4BC2778F7A2664D018; ppmdig=146943593700000053a1745fcea9a42f3854f9c2d6779b2d; sct=178; ld=Kyllllllll2gP8EslllllVWq1i7lllllzAzgtlllll9lllllpylll5@@@@@@@@@@; IPLOC=CN1101; LSTMV=546%2C205; LCLKINT=1226'
+        self.headers['Cookie'] ='IPLOC=CN1101; SUID=7E7FDFDD4FC80D0A0000000057A1AE01; SUV=1470213634020523; jrtt_at=67ccc299a7402fab585fc338a95e62e2; ABTEST=0|1470213636|v1; weixinIndexVisited=1; SNUID=7F7EDEDD00043927CA04E941014DE5F0; JSESSIONID=aaajS9_63ex9bfTEQMGwv; sct=4; LSTMV=615%2C77; LCLKINT=7612'
+        self.headers['Cookie2'] = 'IPLOC=CN1101; SUID=1B947F7CE518920A000000005785D852; SUV=00421BC37C7F941B5785D852E356E773; SUID=1B947F7C5EC90D0A000000005785D853; weixinIndexVisited=1; sct=20; ABTEST=8|1471593318|v1; SUIR=1471593327; SNUID=BD11FAF98C8EB6E38A06B56B8CB98A6F; PHPSESSID=25bnt4fhj01fflvmecqvi9gud1; JSESSIONID=aaaQuRrURhdPz_9sYlQxv; LSTMV=66%2C156; LCLKINT=7074'
         self.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'
 
 
@@ -154,8 +155,9 @@ class WeiXinClient(BaseClient):
         if resp.utf8_content.find(u'您的访问过于频繁') >= 0:
             logger.warning("content : %s " %resp.utf8_content)
             message = u'too many requests. user: %s, url: %s' % (
-                self.sg_user, url)
+                self.sg_user, resp.request.url)
             logger.warning(message)
+            logger.info(resp.request.headers)
             raise TooManyRequests(message)
         if resp.utf8_content.find(u'当前请求已过期') >= 0:
             message = 'link expired: %s' % url

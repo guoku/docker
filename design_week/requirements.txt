@@ -1,0 +1,10 @@
+python-dateutil==2.5.0
+pytz
+Flask-SQLAlchemy
+PyMySQL==0.7.1
+requests==2.9.1
+six==1.10.0
+flask==0.11
+Werkzeug==0.11
+gunicorn==19.3.0
+supervisor

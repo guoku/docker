@@ -20,6 +20,7 @@ from guoku_crawler.config import logger , sleeping_interval
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
 
+from guoku_crawler.mail import send_mail_to_masters
 from guoku_crawler.utils import pick, stripHtmlText
 from guoku_crawler import config
 from guoku_crawler.article.client import WeiXinClient, update_sogou_cookie
@@ -80,8 +81,8 @@ def parse_msg_object(msgObj):
 
             #created_datetime must strip time , set to 00:00:00
             #for compatiable with old data
-            created_date = datetime.fromtimestamp(created_datetime_number)\
-                                    .replace(hour=0, minute=0,second=0)
+            created_date = str(datetime.fromtimestamp(created_datetime_number)\
+                                    .replace(hour=0, minute=0,second=0))
 
             article = pick(article_info,keys)
             article['title'] = stripHtmlText(article['title'])
@@ -125,7 +126,7 @@ def parse_article_url_list(response):
             or (result.group() is None) \
             or (result.group(1) is None) :
 
-        logger.warning('can not parse article url list, will try ten more times to get it. url is %s' % response.request.url)
+        logger.warning('can not parse article url list. url is %s' % response.request.url)
         logger.warning('article content is: %s' % response.text)
         return None
 
@@ -420,14 +421,17 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
     try:
         user_article_mission_list = get_user_article_mission_list(weixin_id, update_cookie=update_cookie)
 
-        for i in range(10):
+        for i in range(3):
             if not user_article_mission_list:
-                logger.info('failed to get article list. Try again')
+                logger.info('failed to get article list. Try %d time' % (i+1))
+                time.sleep(2)
                 user_article_mission_list = get_user_article_mission_list(weixin_id, update_cookie=update_cookie)
             else:
                 break
         if not user_article_mission_list:
             logger.error("can't get article list for authorized author %s. will skip." % authorized_user_id)
+            send_mail_to_masters('skip user %s' % weixin_id, 'failed to get article list for authorized author %s, authorized user id: %d, will skip'
+                                 % (weixin_id, authorized_user_id))
             return
 
         for article_mission in user_article_mission_list:
@@ -441,6 +445,7 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
         #todo : mail to admin
     except TooManyRequests as e :
         update_cookie = True
+        send_mail_to_masters('sogou too many requests', '')
         logger.warning('sleeping  ----------- ')
         time.sleep(sleeping_interval)
         logger.warning('wake up --------------')
