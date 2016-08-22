@@ -1,4 +1,4 @@
-FROM 		ubuntu:latest
+FROM 		ubuntu:14.04
 MAINTAINER	jiaxin	<jiaxin@guoku.com>
 COPY		sources.list.trusty /etc/apt/sources.list
 RUN			apt-get update && apt-get install -y gcc g++ cmake libreadline6 libreadline6-dev libncurses5-dev zlib1g-dev
@@ -20,4 +20,5 @@ RUN			chown -R mysql /opt/mysql5
 WORKDIR		/opt/mysql5
 VOLUME 		["/data"]
 ADD 		my.cnf /etc/my.cnf
+RUN			/opt/mysql5/scripts/mysql_install_db --user=mysql
 EXPOSE		3306
