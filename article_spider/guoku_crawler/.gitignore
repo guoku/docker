@@ -12,4 +12,5 @@ images/
 .jpg
 .DS_Store
 .log
+logs/
 
