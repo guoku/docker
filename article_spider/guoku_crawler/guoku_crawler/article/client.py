@@ -110,7 +110,6 @@ class WeiXinClient(BaseClient):
         super(WeiXinClient, self).__init__()
         self._sg_user = None
         self.headers['Cookie'] ='IPLOC=CN1101; SUID=7E7FDFDD4FC80D0A0000000057A1AE01; SUV=1470213634020523; jrtt_at=67ccc299a7402fab585fc338a95e62e2; ABTEST=0|1470213636|v1; weixinIndexVisited=1; SNUID=7F7EDEDD00043927CA04E941014DE5F0; JSESSIONID=aaajS9_63ex9bfTEQMGwv; sct=4; LSTMV=615%2C77; LCLKINT=7612'
-        self.headers['Cookie2'] = 'IPLOC=CN1101; SUID=1B947F7CE518920A000000005785D852; SUV=00421BC37C7F941B5785D852E356E773; SUID=1B947F7C5EC90D0A000000005785D853; weixinIndexVisited=1; sct=20; ABTEST=8|1471593318|v1; SUIR=1471593327; SNUID=BD11FAF98C8EB6E38A06B56B8CB98A6F; PHPSESSID=25bnt4fhj01fflvmecqvi9gud1; JSESSIONID=aaaQuRrURhdPz_9sYlQxv; LSTMV=66%2C156; LCLKINT=7074'
         self.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'
 
 
@@ -158,6 +157,7 @@ class WeiXinClient(BaseClient):
                 self.sg_user, resp.request.url)
             logger.warning(message)
             logger.info(resp.request.headers)
+            r.delete('sogou.cookie.%s' % self.sg_user)
             raise TooManyRequests(message)
         if resp.utf8_content.find(u'当前请求已过期') >= 0:
             message = 'link expired: %s' % url

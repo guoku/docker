@@ -14,6 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 # config here temp
+from guoku_crawler.mail import send_mail_to_masters
 
 default_selenium_host = 'selenium'
 
@@ -77,7 +78,7 @@ def get_sg_cookie():
         driver.get('http://weixin.sogou.com/')
         print('visited weixin.sogou.com')
         sleep(2)
-        driver.get('http://weixin.sogou.com/weixin?type=1&query=shenyebagua818')
+        driver.get('http://weixin.sogou.com/weixin?type=1&query=shenyebagua818&ie=utf8&_sug_=n&_sug_type_=')
         print('searched by weixin.sogou.com')
         sleep(2)
         # try:
@@ -88,6 +89,8 @@ def get_sg_cookie():
         #     print e.message
         #     pass
         app.logger.info("getting cookies......")
+        if u'您的访问过于频繁' in driver.page_source:
+            send_mail_to_masters('访问过于频繁', 'from phantom server, url: %s' % driver.current_url)
         cookie = '; '.join(
             '{}={}'.format(c['name'], c['value'])
             for c in driver.get_cookies())

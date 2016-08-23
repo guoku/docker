@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 from celery import current_task
 from pymysql.err import InternalError, DatabaseError
 
-from guoku_crawler.config import logger , sleeping_interval
+from guoku_crawler.config import logger , sleeping_interval, redis_cache
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -34,8 +34,7 @@ from guoku_crawler.models import CoreAuthorizedUserProfile as Profile
 
 
 # sys.setrecursionlimit(5000)
-
-
+FailedUserList = []
 SEARCH_API = 'http://weixin.sogou.com/weixinjs'
 ARTICLE_LIST_API = 'http://weixin.sogou.com/gzhjs'
 weixin_client = WeiXinClient()
@@ -154,7 +153,9 @@ def get_link_list_url(weixin_id, update_cookie=False):
     response = weixin_client.get(url=SEARCH_API,
                                  params=params,
                                  jsonp_callback='weixin',
-                                 headers={'Cookie': sg_cookie})
+                                 headers={'Cookie': sg_cookie,
+                                          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                                          'Host': 'weixin.sogou.com'})
     #debug here
     # raise TooManyRequests()
     # return
@@ -430,7 +431,10 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
                 break
         if not user_article_mission_list:
             logger.error("can't get article list for authorized author %s. will skip." % authorized_user_id)
-            send_mail_to_masters('skip user %s' % weixin_id, 'failed to get article list for authorized author %s, authorized user id: %d, will skip'
+            # FailedUserList.append(authorized_user_id)
+            redis_cache.sadd('failed_user', authorized_user_id)
+            logger.info('failed user list: %s' % redis_cache.smembers('failed_user'))
+            send_mail_to_masters('skip user %s %s' % (authorized_user_id, weixin_id), 'failed to get article list for authorized author %s, authorized user id: %d, will skip'
                                  % (weixin_id, authorized_user_id))
             return
 
@@ -447,7 +451,7 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
         update_cookie = True
         send_mail_to_masters('sogou too many requests', '')
         logger.warning('sleeping  ----------- ')
-        time.sleep(sleeping_interval)
+        # time.sleep(sleeping_interval)
         logger.warning('wake up --------------')
         weixin_client.refresh_cookies()
         logger.warning("too many requests or request expired. %s", e.message)
