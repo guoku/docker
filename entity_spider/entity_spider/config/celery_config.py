@@ -28,13 +28,17 @@ CELERY_IMPORTS = (
 )
 
 CELERYBEAT_SCHEDULE = {
-    'check_all_entity_state': {
-        'task': 'entity.check_all_entity_state',
-        'schedule': crontab(minute='0', hour='2', day_of_week=6)
-    },
+    # 'check_all_entity_state': {
+    #     'task': 'entity.check_all_entity_state',
+    #     'schedule': crontab(minute='0', hour='2', day_of_week=6)
+    # },
     'update_all_tb_shop_id': {
         'task': 'shop.update_all_shop_id',
         'schedule': crontab(minute='0', hour='1')
+    },
+    'check_entity_daily': {
+        'task': 'entity.check_entity_daily',
+        'schedule': crontab(minute='0', hour='2')
     },
 
 }

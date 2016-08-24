@@ -2,6 +2,8 @@ from __future__ import  absolute_import
 
 import time
 
+import datetime
+
 from entity_spider.Client import Retry
 from entity_spider.Client import TaobaoRequestException
 from entity_spider.Handlers import LinkHandlerException
@@ -52,10 +54,29 @@ def check_all_entity_state():
     run_time = end - start
     logger.info('total running time for task check_all_entity_state is %f seconds' % run_time)
 
+@app.task(base=RequestsTask, name='entity.check_entity_since_june')
+def check_entity_since_june():
+    entities = Entity.objects.active().filter(created_time__gt=datetime.datetime(2016, 6, 1))
+    logger.info('will check %d entities' % entities.count())
 
+    for i, entity in enumerate(queryset_iterator(entities)):
+        # time.sleep(CRAWL_LINK_INTERVAL)
+        logger.info('start check %d entity' % (i+1))
+        check_entity.delay(entity.id)
+
+@app.task(base=RequestsTask, name='entity.check_entity_daily')
+def check_entity_daily():
+    entities = Entity.objects.active().filter(created_time__gt=(datetime.datetime.today()-datetime.timedelta(days=1)))
+    logger.info('will check %d entities' % entities.count())
+
+    for i, entity in enumerate(queryset_iterator(entities)):
+        # time.sleep(CRAWL_LINK_INTERVAL)
+        logger.info('start check %d entity' % (i+1))
+        check_entity.delay(entity.id)
 
 if __name__ == '__main__':
-    check_all_entity_state()
+    check_entity_daily()
+    print 'over'
 
     #to do check this one
     # for i in range(20):
