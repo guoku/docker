@@ -465,14 +465,14 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
             # redis_cache.sadd('failed_user', authorized_user_id)
             # logger.info('failed user list: %s' % redis_cache.smembers('failed_user'))
             r.sadd('skip_users', authorized_user_id)
-            send_mail_to_masters('skip user %s %s' % (authorized_user_id, weixin_id), 'failed to get article list. skip users: '
+            send_mail_to_masters('skip user %s %s' % (authorized_user_id, weixin_id), 'failed to get article list. skip users: %s'
                                  % r.smembers('skip_users'))
-            return
+            return False
 
         for article_mission in user_article_mission_list:
             # print article_mission
             crawl_weixin_single_article_mission.delay(article_mission, authorized_user_id, update_cookie=False)
-        return
+        return True
 
     except CanNotFindWeixinInSogouException as e :
         logger.error('Fatal mission fail : %s ' %e.message )
@@ -582,13 +582,11 @@ def get_new_cookie():
     cookie = update_sogou_cookie(sg_user)
     return cookie
 
-@app.task(base=RequestsTask, name='is_phantomjs_gen_cookie_ok')
 def is_phantomjs_gen_cookie_ok():
     try:
         cookie = get_new_cookie()
         if is_cookie_valid(cookie):
             logger.info('phantom server ok')
-            send_mail_to_masters('phantom server works', 'ip: %s' % server_ip)
             return True
         return False
     except Exception as e:
@@ -596,3 +594,18 @@ def is_phantomjs_gen_cookie_ok():
         logger.info('phantom server can not provide valid cookie')
         send_mail_to_masters('phantom server can not provide valid cookie', 'ip: %s' % server_ip)
         return False
+
+@app.task(base=RequestsTask, name='check_is_phantomjs_gen_cookie_ok')
+def check_is_phantomjs_gen_cookie_ok():
+    if is_phantomjs_gen_cookie_ok():
+        send_mail_to_masters('phantom server works', 'ip: %s' % server_ip)
+
+@app.task(base=RequestsTask, name='is_weixin_crawler_ok')
+def is_weixin_crawler_ok(authorized_user_id=41):
+    if crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id):
+        logger.info('weixin crawler ok')
+        send_mail_to_masters('weixin crawler test success', 'ip : %s' % server_ip)
+        return True
+    else:
+        send_mail_to_masters('weixin crawler test failed, please check log', 'ip : %s' % server_ip)
+        logger.error('weixin crawler failed')
