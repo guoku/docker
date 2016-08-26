@@ -29,4 +29,6 @@ class ProxyFail(Exception):
 class CanNotFindWeixinInSogouException(CrawlerBaseException):
     pass
 
-
+class GetValidCookieFailed(Exception):
+    def __init__(self, message=u'failed to get valid cookie'):
+        self.message = message

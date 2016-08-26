@@ -10,12 +10,13 @@ from time import sleep
 from faker import Faker
 from urlparse import urljoin
 
-from guoku_crawler.config import logger
+from guoku_crawler.config import logger, server_ip
 from requests.exceptions import ReadTimeout
 from requests.exceptions import ConnectionError
 
 from guoku_crawler.db import r
 from guoku_crawler import config
+from guoku_crawler.mail import send_mail_to_masters
 from guoku_crawler.tasks import RequestsTask, app
 from guoku_crawler.exceptions import TooManyRequests, Expired, Retry , ProxyFail
 
@@ -109,7 +110,7 @@ class WeiXinClient(BaseClient):
     def __init__(self):
         super(WeiXinClient, self).__init__()
         self._sg_user = None
-        self.headers['Cookie'] ='IPLOC=CN1101; SUID=7E7FDFDD4FC80D0A0000000057A1AE01; SUV=1470213634020523; jrtt_at=67ccc299a7402fab585fc338a95e62e2; ABTEST=0|1470213636|v1; weixinIndexVisited=1; SNUID=7F7EDEDD00043927CA04E941014DE5F0; JSESSIONID=aaajS9_63ex9bfTEQMGwv; sct=4; LSTMV=615%2C77; LCLKINT=7612'
+        self.headers['Cookie'] ='IPLOC=CN1100; SUID=1B947F7CE518920A000000005785D852; SUV=00421BC37C7F941B5785D852E356E773; SUID=1B947F7C5EC90D0A000000005785D853; weixinIndexVisited=1; sct=22; ABTEST=8|1471593318|v1; SUIR=1471593327; SNUID=42382D79A2A79915C38E8AFAA387A27C; PHPSESSID=qaeairbr9e91auav8943ve95n4; JSESSIONID=aaa8TDFtx5OQs7CBPPIAv; LSTMV=162%2C172; LCLKINT=1586; seccodeErrorCount=1|Thu, 25 Aug 2016 06:05:42 GMT; seccodeRight=success; successCount=1|Thu, 25 Aug 2016 06:05:49 GMT'
         self.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'
 
 
@@ -153,10 +154,11 @@ class WeiXinClient(BaseClient):
         # catch exceptions
         if resp.utf8_content.find(u'您的访问过于频繁') >= 0:
             logger.warning("content : %s " %resp.utf8_content)
-            message = u'too many requests. user: %s, url: %s' % (
+            message = u'too many requests, task failed. user: %s, url: %s' % (
                 self.sg_user, resp.request.url)
             logger.warning(message)
             logger.info(resp.request.headers)
+            send_mail_to_masters('sogou too many requests, ip: %s' % server_ip, 'user %s' % self.sg_user)
             r.delete('sogou.cookie.%s' % self.sg_user)
             raise TooManyRequests(message)
         if resp.utf8_content.find(u'当前请求已过期') >= 0:
@@ -177,12 +179,19 @@ class WeiXinClient(BaseClient):
         # if update:
         #     update_sogou_cookie.delay(self.sg_user)
 
-        sg_users = list(config.SOGOU_USERS)
-        if self.sg_user:
-            sg_users.remove(self.sg_user)
+        # sg_users = list(config.SOGOU_USERS)
+        # if self.sg_user:
+        #     sg_users.remove(self.sg_user)
 
-        sg_user = random.choice(sg_users)
-        sg_cookie = r.get('sogou.cookie.%s' % sg_user)
+        # sg_user = random.choice(sg_users)
+        cookies_user_list = r.keys('sogou.cookie.*')
+        if len(cookies_user_list) > 0:
+            user_key = cookies_user_list.pop()
+            sg_user = user_key.replace('sogou.cookie.', '')
+            sg_cookie = r.get(user_key)
+        else:
+            sg_cookie = None
+            sg_user = random.choice(list(config.SOGOU_USERS))
         if not sg_cookie:
             result = update_sogou_cookie.delay(sg_user)
             while not result.ready():
@@ -194,8 +203,8 @@ class WeiXinClient(BaseClient):
             sg_cookie = sg_cookie.decode()
         self._sg_user = sg_user
         self.headers['Cookie'] = sg_cookie
-        # self.headers['User-Agent'] = faker.user_agent()
         self.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'
+        return sg_cookie
 
     @classmethod
     def parse_jsonp(cls, utf8_content, callback):
@@ -229,10 +238,14 @@ def update_sogou_cookie(sg_user):
         print('-' * 80)
         key = 'sogou.cookie.%s' % sg_user
         r.set(key, cookie)
+        return cookie
 
     except ValueError as e :
-        time.sleep(25)
+        time.sleep(2)
         logger.error("Cookie Getting Failed, no json returned")
+        if resp.content == 'too many request':
+            logger.error('phantom server got too many request, need fill in capchar')
+            return
 
         update_sogou_cookie(get_random_sg_user())
     except Exception as e :

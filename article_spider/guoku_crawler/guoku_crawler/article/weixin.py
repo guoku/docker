@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 from celery import current_task
 from pymysql.err import InternalError, DatabaseError
 
-from guoku_crawler.config import logger , sleeping_interval, redis_cache
+from guoku_crawler.config import logger , sleeping_interval, server_ip
 from sqlalchemy import and_
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -27,8 +27,9 @@ from guoku_crawler.article.client import WeiXinClient, update_sogou_cookie
 from guoku_crawler.tasks import RequestsTask, app
 from guoku_crawler.common.image import fetch_image
 from guoku_crawler.common.parse import clean_xml
-from guoku_crawler.db import session
-from guoku_crawler.exceptions import TooManyRequests, Expired, Retry ,CanNotFindWeixinInSogouException
+from guoku_crawler.db import session, r
+from guoku_crawler.exceptions import TooManyRequests, Expired, Retry ,CanNotFindWeixinInSogouException, \
+    GetValidCookieFailed
 from guoku_crawler.models import CoreArticle
 from guoku_crawler.models import CoreAuthorizedUserProfile as Profile
 
@@ -140,7 +141,13 @@ def parse_article_url_list(response):
 
     #         TODO : parse object
 
-
+def get_weixinjs_response(params, cookie):
+    return weixin_client.get(url=SEARCH_API,
+                      params=params,
+                      jsonp_callback='weixin',
+                      headers={'Cookie': cookie,
+                               'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                               'Host': 'weixin.sogou.com'})
 
 
 def get_link_list_url(weixin_id, update_cookie=False):
@@ -148,14 +155,9 @@ def get_link_list_url(weixin_id, update_cookie=False):
     logger.info('get weixin article url list for %s ', weixin_id)
 
     # weixin_client.refresh_cookies(update_cookie)
-    sg_cookie = weixin_client.headers.get('Cookie')
 
-    response = weixin_client.get(url=SEARCH_API,
-                                 params=params,
-                                 jsonp_callback='weixin',
-                                 headers={'Cookie': sg_cookie,
-                                          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                                          'Host': 'weixin.sogou.com'})
+    cookie = get_valid_cookie()
+    response = get_weixinjs_response(params, cookie)
     #debug here
     # raise TooManyRequests()
     # return
@@ -163,6 +165,34 @@ def get_link_list_url(weixin_id, update_cookie=False):
 
     list_link_url = parse_link_list_for_weixinid(response, weixin_id);
     return list_link_url, referer
+
+def is_cookie_valid(cookie):
+    params = dict(type='1', ie='utf8', query='test')
+    try:
+        return get_weixinjs_response(params, cookie)
+
+    except TooManyRequests:
+        return False
+
+def get_valid_cookie():
+    cookies_user_list = r.keys('sogou.cookie.*')
+    if len(cookies_user_list) > 0:
+        for user_key in cookies_user_list:
+            cookie = r.get(user_key)
+            if is_cookie_valid(cookie):
+                logger.info('got valid cookie from redis')
+                return cookie
+            else:
+                r.delete(user_key)
+
+    else:
+        keep_cookie_pool.delay(size=3)
+        while True:
+            cookie = get_new_cookie()
+            if is_cookie_valid(cookie):
+                logger.info('get valid cookie from phantom server')
+                return cookie
+
 
 
 def get_link_list_by_url(url, referer):
@@ -432,10 +462,11 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
         if not user_article_mission_list:
             logger.error("can't get article list for authorized author %s. will skip." % authorized_user_id)
             # FailedUserList.append(authorized_user_id)
-            redis_cache.sadd('failed_user', authorized_user_id)
-            logger.info('failed user list: %s' % redis_cache.smembers('failed_user'))
-            send_mail_to_masters('skip user %s %s' % (authorized_user_id, weixin_id), 'failed to get article list for authorized author %s, authorized user id: %d, will skip'
-                                 % (weixin_id, authorized_user_id))
+            # redis_cache.sadd('failed_user', authorized_user_id)
+            # logger.info('failed user list: %s' % redis_cache.smembers('failed_user'))
+            r.sadd('skip_users', authorized_user_id)
+            send_mail_to_masters('skip user %s %s' % (authorized_user_id, weixin_id), 'failed to get article list. skip users: '
+                                 % r.smembers('skip_users'))
             return
 
         for article_mission in user_article_mission_list:
@@ -449,13 +480,14 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
         #todo : mail to admin
     except TooManyRequests as e :
         update_cookie = True
-        send_mail_to_masters('sogou too many requests', '')
         logger.warning('sleeping  ----------- ')
         # time.sleep(sleeping_interval)
         logger.warning('wake up --------------')
         weixin_client.refresh_cookies()
-        logger.warning("too many requests or request expired. %s", e.message)
         crawl_user_weixin_articles_by_authorized_user_id.delay(authorized_user_id, update_cookie=False)
+        logger.info('have send another task to crawl article for %s' % weixin_id)
+    except GetValidCookieFailed:
+        logger.info('Warning: skip user %d %s, can not get valid cookie' % (authorized_user_id, weixin_id))
     except Retry as e :
 
         if (retry_count -1) > 0:
@@ -506,3 +538,61 @@ def prepare_sogou_cookies():
             result.get()
     else:
         logger.error("phantom web server is unavailable!")
+@app.task(base=RequestsTask, name='build_cookie_pool')
+def build_cookie_pool(max_try_times=20, cookie_pool_size=5):
+    if is_phantomjs_gen_cookie_ok():
+        cookies_user_list = r.keys('sogou.cookie.*')
+        times = 0
+        while len(cookies_user_list) < cookie_pool_size:
+            if times > max_try_times:
+                break
+            new_cookie = get_new_cookie()
+            times += 1
+            logger.info('try %d time to get new cookie.' % times)
+            if is_cookie_valid(new_cookie):
+                user_key = 'sogou.cookie.%s' % weixin_client._sg_user
+                r.set(user_key, new_cookie)
+                cookies_user_list.append(user_key)
+                logger.info('success got new valid cookie. now we have %d cookie.' % len(cookies_user_list))
+        logger.info('build cookie pool over. now have %d valid cookie' % len(cookies_user_list))
+    else:
+        logger.error('can not build cookie pool, phantom server can not provide valid cookie.')
+
+def get_cookie_count():
+    cookies_user_list = r.keys('sogou.cookie.*')
+    for key in cookies_user_list:
+        cookie = r.get(key)
+        if not is_cookie_valid(cookie):
+            r.delete(key)
+    return len(r.keys('sogou.cookie.*'))
+
+@app.task(base=RequestsTask, name='keep_cookie_pool')
+def keep_cookie_pool(size=5):
+    cookie_count = get_cookie_count()
+    logger.info('there is %d valid cookie now.' % cookie_count)
+    if cookie_count < size:
+        build_cookie_pool(cookie_pool_size=size)
+    logger.info('valid cookie count: %d' % get_cookie_count())
+    return r.keys('sogou.cookie.*')
+
+
+
+def get_new_cookie():
+    sg_user = random.choice(list(config.SOGOU_USERS))
+    cookie = update_sogou_cookie(sg_user)
+    return cookie
+
+@app.task(base=RequestsTask, name='is_phantomjs_gen_cookie_ok')
+def is_phantomjs_gen_cookie_ok():
+    try:
+        cookie = get_new_cookie()
+        if is_cookie_valid(cookie):
+            logger.info('phantom server ok')
+            send_mail_to_masters('phantom server works', 'ip: %s' % server_ip)
+            return True
+        return False
+    except Exception as e:
+        logger.error(e.message)
+        logger.info('phantom server can not provide valid cookie')
+        send_mail_to_masters('phantom server can not provide valid cookie', 'ip: %s' % server_ip)
+        return False

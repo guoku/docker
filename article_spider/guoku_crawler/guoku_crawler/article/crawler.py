@@ -9,7 +9,8 @@ from sqlalchemy import or_
 from guoku_crawler.db import session
 from guoku_crawler.tasks import RequestsTask, app
 from guoku_crawler.article.rss import  crawl_rss_list
-from guoku_crawler.article.weixin import crawl_user_weixin_articles_by_authorized_user_id
+from guoku_crawler.article.weixin import crawl_user_weixin_articles_by_authorized_user_id, build_cookie_pool, \
+    is_phantomjs_gen_cookie_ok, get_new_cookie, keep_cookie_pool
 from guoku_crawler.models import CoreGkuser, AuthGroup, CoreArticle
 from guoku_crawler.models import CoreAuthorizedUserProfile as Profile
 from guoku_crawler.config import logger
@@ -26,6 +27,7 @@ today_start = datetime.datetime.combine(
 
 @app.task(base=RequestsTask, name='crawl_articles')
 def crawl_articles():
+    keep_cookie_pool()
     users = get_auth_users()
     for user in users:
         # time.sleep(5)
@@ -72,5 +74,7 @@ def get_auth_users():
 if __name__ == '__main__':
     # crawl_rss(60)
     # crawl_articles()
-    crawl_user_weixin_articles_by_authorized_user_id(31)
+    # crawl_rss_list(111)
+    keep_cookie_pool()
+    crawl_user_weixin_articles_by_authorized_user_id(41)
     print('*' * 80)

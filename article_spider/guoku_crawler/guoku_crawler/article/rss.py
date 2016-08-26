@@ -168,7 +168,11 @@ class RssBaseParser(object):
         if is_valid_page(self.url) and not is_valid_page(self.url, params={'paged': self.page}):
             return [self.url]
         page1 = self.url
-        page2 = self.url + u'?paged=2'
+        if '?' in self.url:
+            page2=self.url + '&paged=2'
+        else:
+            page2 = self.url + u'?paged=2'
+
         article1 = self.parse(page1)
         article2 = self.parse(page2)
         if article1[0]['title'] == article2[0]['title'] and article1[-1]['title'] == article2[-1]['title']:
@@ -186,6 +190,8 @@ class RssBaseParser(object):
                 small = middle
             else:
                 big = middle
+        if '?' in self.url:
+            return ['{url}&paged={page}'.format(url=self.url, page=page) for page in range(1, big)]
 
         return ['{url}?paged={page}'.format(url=self.url, page=page) for page in range(1, big)]
 
@@ -253,8 +259,11 @@ def is_valid_page(url, params=None):
     return False
 @app.task(base=RequestsTask, name='rss.new_crawl_list')
 def crawl_rss_list(authorized_user_id):
-
-    authorized_user = session.query(Profile).get(authorized_user_id)
+    try:
+        authorized_user = session.query(Profile).get(authorized_user_id)
+    except:
+        session.rollback()
+        crawl_rss_list.delay(authorized_user_id)
     logger.info('start to crawle rss link %s' % authorized_user.rss_url)
     rss_url = authorized_user.rss_url
     parser_list = [RssDefaultParser, KakkokoParser]
