@@ -223,6 +223,7 @@ def get_weixin_id_by_authorized_user_id(userid):
                                  .strip()
         return weixin_id
     except Exception as e :
+        logger.error(e.message)
         return None
 
 def get_user_by_authorized_user_id(userid):
@@ -472,6 +473,7 @@ def crawl_user_weixin_articles_by_authorized_user_id(authorized_user_id, update_
         for article_mission in user_article_mission_list:
             # print article_mission
             crawl_weixin_single_article_mission.delay(article_mission, authorized_user_id, update_cookie=False)
+        logger.info("send user's all crawl article mission for  %d %s  success" % (authorized_user_id, weixin_id))
         return True
 
     except CanNotFindWeixinInSogouException as e :

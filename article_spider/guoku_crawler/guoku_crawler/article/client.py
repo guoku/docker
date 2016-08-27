@@ -142,7 +142,7 @@ class WeiXinClient(BaseClient):
                                                  cert, json)
 
         logger.warning('------- requesting -------')
-        logger.warning('url :  %s' % url)
+        logger.warning('url :  %s' % resp.request.url)
         logger.warning('cooke : %s' %self.headers['Cookie'][:50] or 'No cookie')
         logger.warning('user agent : %s' %self.headers['User-Agent'][:50] or 'No UA')
         # logger.warning('content : %s' % resp.text)
@@ -168,7 +168,8 @@ class WeiXinClient(BaseClient):
 
         if jsonp_callback:
             resp.jsonp = self.parse_jsonp(resp.utf8_content, jsonp_callback)
-            if resp.jsonp.get('code') == 'needlogin':
+            logger.info('resp.jsonp: %s' % str(resp.jsonp)[:60])
+            if resp.jsonp and resp.jsonp.get('code') == 'needlogin':
                 self.refresh_cookies()
                 raise Retry(message=u'need login with %s.' % self.sg_user)
         sleep(config.REQUEST_INTERVAL)
