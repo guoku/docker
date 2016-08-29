@@ -224,7 +224,7 @@ class RssBaseParser(object):
 
 class RssDefaultParser(RssBaseParser):
     def can_handle(self, url):
-        if url in ('http://blog.kakkoko.com/1/feed'):
+        if url in ('http://blog.kakkoko.com/1/feed', 'http://www.mottimes.com/cht/rss.php'):
             return False
         return True
 
@@ -247,6 +247,35 @@ class KakkokoParser(RssBaseParser):
                 break
         return urls
 
+class MottimesParser(RssBaseParser):
+    def can_handle(self, url):
+        if url == 'http://www.mottimes.com/cht/rss.php':
+            return True
+        return False
+
+    def parse(self, url):
+        try:
+            response = rss_client.get(url)
+            xml_content = BeautifulSoup(response.utf8_content, 'xml')
+            item_list = xml_content.find_all('item')
+            articles = []
+            for item in item_list:
+                title = item.title.text
+                identity_code = caculate_rss_identity_code(title, self.authorized_user.user.id, item.link.text)
+                content = item.content.text
+                cleaner = Cleaner(kill_tags=['script', 'iframe'])
+                content = cleaner.clean_html(content)
+                articles.append({'title': title, 'creator': self.authorized_user.user,
+                                 'identity_code': identity_code, 'content': content,
+                                 'updated_datetime': datetime.datetime.now(),
+                                 'created_datetime': parser.parse(item.pubDate.text),
+                                 'publish': CoreArticle.published, 'cover': config.DEFAULT_ARTICLE_COVER,
+                                 'origin_url': item.link.text, 'source': 2})
+        except Exception as e:
+            logger.error(e.message)
+            return []
+        return articles
+
 
 def is_valid_page(url, params=None):
     try:
@@ -266,7 +295,7 @@ def crawl_rss_list(authorized_user_id):
         crawl_rss_list.delay(authorized_user_id)
     logger.info('start to crawle rss link %s' % authorized_user.rss_url)
     rss_url = authorized_user.rss_url
-    parser_list = [RssDefaultParser, KakkokoParser]
+    parser_list = [RssDefaultParser, KakkokoParser, MottimesParser]
     for parser in parser_list:
         parser = parser(rss_url, authorized_user)
         if parser.can_handle(rss_url):
