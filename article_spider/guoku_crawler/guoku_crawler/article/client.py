@@ -152,7 +152,7 @@ class WeiXinClient(BaseClient):
             return resp
 
         # catch exceptions
-        if resp.utf8_content.find(u'您的访问过于频繁') >= 0:
+        if resp.utf8_content.find(u'您的访问过于频繁') >= 0 or 'antispider' in resp.url:
             logger.warning("content : %s " %resp.utf8_content)
             message = u'too many requests, task failed. user: %s, url: %s' % (
                 self.sg_user, resp.request.url)
