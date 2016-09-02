@@ -18,7 +18,7 @@ def item_list(ids=None):
         resp = req.getResponse()
         # pprint(resp)
         return resp
-    except Exception, e:
+    except Exception as e:
         # pprint(e)
         return None
 
