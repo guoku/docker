@@ -109,7 +109,7 @@ class WeiXinClient(BaseClient):
     def __init__(self):
         super(WeiXinClient, self).__init__()
         self._sg_user = None
-        self.headers['Cookie'] ='IPLOC=CN1101; SUID=7E7FDFDD4FC80D0A0000000057A1AE01; SUV=1470213634020523; jrtt_at=67ccc299a7402fab585fc338a95e62e2; ABTEST=0|1470213636|v1; weixinIndexVisited=1; SNUID=7F7EDEDD00043927CA04E941014DE5F0; JSESSIONID=aaajS9_63ex9bfTEQMGwv; sct=4; LSTMV=615%2C77; LCLKINT=7612'
+        self.headers['Cookie'] ='SUV=1387161004695182; lastdomain=null; ssuid=1407346305; pgv_pvi=5216948224; pgv_si=s6847528960; pid=ask.xgzs.lddj; cid=w.search.yjjlink; GOTO=Af90017; SEID=000000004658860A2AFF0B10000B66B8; CXID=0A522AD3998C91A8993D3877F703A871; PHPSESSID=b7oek1dhh4ks6dl3fk453hisa7; JSESSIONID=aaaqBvaz15csY4qZ9lPqv; usid=1Aan8ijzyktfZRaL; _ga=GA1.2.101216933.1468209473; ss_pidf=1; ss_cidf=1; weixinIndexVisited=1; jrtt_at=b4dac6be7f2645148f7ec8451e9d5a9a; ld=Hkllllllll2gP8EslllllVWTVq6lllllzAzgtlllll9lllll9Zlll5@@@@@@@@@@; ABTEST=0|1471616347|v1; ppinf=5|1472346445|1473556045|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MTEyMHx1bmlxbmFtZTowOnxjcnQ6MTA6MTQ3MjM0NjQ0NXxyZWZuaWNrOjA6fHVzZXJpZDoyNDpkcmluZDE5NzdAam91cnJhcGlkZS5jb218; pprdig=ugEyryJYh63p_hqddWhVneNmAK9RWEBfBvuWgBpkz8mSB8x2orv8a2w_mc2aIJl7tSlBtHXQqiY-mc0CfgmEXf-jpQWMuxj8sohaWR04bFZ13WqmwV3cDk9-WXaGK2Yo0TR28oYV6qH0Po8436asYenLLcpVj-B52al9S42GMc4; SNUID=43E803037274491B3B336678722AEB81; ad=@QpZyZllll2QBdmalllllVKwLGGlllllbDb1Dkllll9llllllklll5@@@@@@@@@@; SUID=F2F4C66F506C860A5667DB8B000E648F; sct=226; IPLOC=CN1100; ppmdig=1472788565000000d358cc74614b1ee63844c9d31af4796f'
         self.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'
 
 
