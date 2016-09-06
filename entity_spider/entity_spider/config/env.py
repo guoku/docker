@@ -1,13 +1,13 @@
 #config for local
 #=========================
-# data_base_ip = '192.168.1.113'
+# data_base_ip = '192.168.1.101'
 # data_base_user = 'guoku'
 # data_base_pass = 'guoku!@#'
 #
 # celery_eager = False
 # celery_concurrency  = 30
-# broker_url = 'redis://127.0.0.1:6379'
-# redis_host = '127.0.0.1'
+# broker_url = 'redis://redis:6379'
+# redis_host = 'redis:6379'
 #
 #
 # image_host = 'http://127.0.0.1:9766/'
@@ -29,6 +29,7 @@
 # image_path = 'images/'
 # local_file = False
 # redis_host = 'redis:6379'
+
 
 #config for production
 #=========================

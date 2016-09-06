@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import datetime
 import time
 
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 
 from guoku_crawler.db import session
 from guoku_crawler.tasks import RequestsTask, app
@@ -35,13 +35,15 @@ def crawl_articles():
             logger.error('fatal , exception when crawl %s' %user)
 
 
+
+
 @app.task(base=RequestsTask, name='crawl_user_articles')
-def crawl_user_articles(authorized_user_id):
+def crawl_user_articles(authorized_user_id, only_weixin=True):
     # crawl rss article if user has rss url,
     # else crawl weixin article from sogou.
     authorized_user = session.query(Profile).get(authorized_user_id)
 
-    if authorized_user.rss_url:
+    if authorized_user.rss_url and not only_weixin:
         crawl_rss_list.delay(authorized_user_id)
     else:
         crawl_user_weixin_articles_by_authorized_user_id.delay(authorized_user_id)
@@ -55,10 +57,8 @@ def get_auth_users():
                 Profile.rss_url.isnot(None)
             )),
         CoreGkuser.groups.any(AuthGroup.name == 'Author')
-    ).all()
+    ).all().order_by(CoreGkuser.id.desc())
     return users
-
-
 
 
 if __name__ == '__main__':
