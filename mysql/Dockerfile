@@ -1,4 +1,4 @@
-FROM 		ubuntu:14.04
+FROM 		ubuntu:16.04
 MAINTAINER	jiaxin	<jiaxin@guoku.com>
 COPY		sources.list.trusty /etc/apt/sources.list
 RUN			apt-get update && apt-get install -y gcc g++ cmake libreadline6 libreadline6-dev libncurses5-dev zlib1g-dev
